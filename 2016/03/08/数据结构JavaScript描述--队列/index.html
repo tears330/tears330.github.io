@@ -1,0 +1,905 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="JavaScript,数据结构," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="队列是一种列表，不同的是只能在队尾插入元素，在对首删除元素。队列用于储存顺序排列的数据，先进先出（First-In-First-Out,FIFO）。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据结构JavaScript描述--队列">
+<meta property="og:url" content="http://zzfe.top/2016/03/08/数据结构JavaScript描述--队列/index.html">
+<meta property="og:site_name" content="ZzFe">
+<meta property="og:description" content="队列是一种列表，不同的是只能在队尾插入元素，在对首删除元素。队列用于储存顺序排列的数据，先进先出（First-In-First-Out,FIFO）。">
+<meta property="og:updated_time" content="2017-02-24T10:16:26.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="数据结构JavaScript描述--队列">
+<meta name="twitter:description" content="队列是一种列表，不同的是只能在队尾插入元素，在对首删除元素。队列用于储存顺序排列的数据，先进先出（First-In-First-Out,FIFO）。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://zzfe.top/2016/03/08/数据结构JavaScript描述--队列/"/>
+
+
+
+
+
+  <title> 数据结构JavaScript描述--队列 | ZzFe </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=60875579";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ZzFe</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">记录一路热烈</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://zzfe.top/2016/03/08/数据结构JavaScript描述--队列/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zz">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ww1.sinaimg.cn/large/73797f53gw1f8ou875kqmj20gv0gvabl.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ZzFe">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                数据结构JavaScript描述--队列
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-03-08T22:54:33+08:00">
+                2016-03-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaScript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/03/08/数据结构JavaScript描述--队列/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/08/数据结构JavaScript描述--队列/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>队列是一种列表，不同的是只能在队尾插入元素，在对首删除元素。队列用于储存顺序排列的数据，先进先出（First-In-First-Out,FIFO）。<a id="more"></a></p>
+<h2 id="队列的DST"><a href="#队列的DST" class="headerlink" title="队列的DST"></a>队列的DST</h2><table>
+<thead>
+<tr>
+<th>属性和方法</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>dataStore</td>
+<td>初始化数组存放数据</td>
+</tr>
+<tr>
+<td>enqueue</td>
+<td>向队尾添加一个元素</td>
+</tr>
+<tr>
+<td>dequeue</td>
+<td>删除队首元素</td>
+</tr>
+<tr>
+<td>front</td>
+<td>读取队首元素</td>
+</tr>
+<tr>
+<td>back</td>
+<td>读取队尾元素</td>
+</tr>
+<tr>
+<td>isEmpty</td>
+<td>判断队列是否为空</td>
+</tr>
+<tr>
+<td>toString</td>
+<td>显示队列所有元素</td>
+</tr>
+</tbody>
+</table>
+<h2 id="队列的实现"><a href="#队列的实现" class="headerlink" title="队列的实现"></a>队列的实现</h2><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Queue</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">this</span>.dataStore = [];</div><div class="line">&#125;</div><div class="line"></div><div class="line">Queue.prototype = &#123;</div><div class="line">    enqueue : <span class="function"><span class="keyword">function</span><span class="params">(element)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.dataStore.push(element);</div><div class="line">    &#125;,</div><div class="line">    dequeue : <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.dataStore.shift();</div><div class="line">    &#125;,</div><div class="line">    front : <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.dataStore[<span class="number">0</span>];</div><div class="line">    &#125;,</div><div class="line">    back : <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.dataStore[<span class="keyword">this</span>.dataStore.length - <span class="number">1</span>];</div><div class="line">    &#125;,</div><div class="line">    isEmpty : <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.dataStore.length == <span class="number">0</span>) &#123;</div><div class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;,</div><div class="line">    toString : <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.dataStore.toString();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="使用队列对数组进行排序"><a href="#使用队列对数组进行排序" class="headerlink" title="使用队列对数组进行排序"></a>使用队列对数组进行排序</h2><p>使用队列可以实现一种十分特别的排序算法–基数排序。具体思路如下:</p>
+<p>对于0~99的数组，基数排序将数据集扫描两次。第一次按个位上的数字进行排序，第二次按十位上的数字进行排序。每个数字根据对应位上的数值分在不同的盒子里。假设有下面一组数字：</p>
+<p><strong>31,22,45,56,77,89,12,66,43,97</strong></p>
+<p>经过基数排序第一次扫描，数字被分配到如下盒子中：</p>
+<table>
+<thead>
+<tr>
+<th>盒子</th>
+<th>数字</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td></td>
+</tr>
+<tr>
+<td>1</td>
+<td>31</td>
+</tr>
+<tr>
+<td>2</td>
+<td>22，12</td>
+</tr>
+<tr>
+<td>3</td>
+<td>43</td>
+</tr>
+<tr>
+<td>4</td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td>45</td>
+</tr>
+<tr>
+<td>6</td>
+<td>56，66</td>
+</tr>
+<tr>
+<td>7</td>
+<td>77，97</td>
+</tr>
+<tr>
+<td>8</td>
+<td></td>
+</tr>
+<tr>
+<td>9</td>
+<td>89</td>
+</tr>
+</tbody>
+</table>
+<p>根据盒子的顺序，对数字进行第一次排序的结果如下：</p>
+<p><code>31,22,12,43,45,56,66,77,97,89</code></p>
+<p>然后进行第二次扫描，根据十位上的数值再将上次排序的结果分配到不同的盒子中。</p>
+<table>
+<thead>
+<tr>
+<th>盒子</th>
+<th>数字</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td></td>
+</tr>
+<tr>
+<td>1</td>
+<td>12</td>
+</tr>
+<tr>
+<td>2</td>
+<td>22</td>
+</tr>
+<tr>
+<td>3</td>
+<td>31</td>
+</tr>
+<tr>
+<td>4</td>
+<td>43，45</td>
+</tr>
+<tr>
+<td>5</td>
+<td>56</td>
+</tr>
+<tr>
+<td>6</td>
+<td>66</td>
+</tr>
+<tr>
+<td>7</td>
+<td>77</td>
+<td></td>
+</tr>
+<tr>
+<td>8</td>
+<td>89</td>
+</tr>
+<tr>
+<td>9</td>
+<td>97</td>
+</tr>
+</tbody>
+</table>
+<p>最后将盒子中数字取出，组成一个新的列表：</p>
+<p><code>12,22,31,43,45,56,66,77,89,97</code></p>
+<p>我们使用队列来代表盒子。一个需要九个队列，每个对应一个数字。将所有队列保存在一个数组中，使用取余和除法确定各位和十位。算法的剩余部分将数字加入相应队列，根据各位数值排序，然后在根据十位数值排序，结果即为排序好的数字。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">/* 队列实现基数排序 */</span></div><div class="line"></div><div class="line"><span class="comment">// nums为长度为10位由数字组成的数组</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">radix</span>(<span class="params">nums</span>) </span>&#123;</div><div class="line">    <span class="comment">// 更具相应位分配给队列</span></div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">distribute</span>(<span class="params">nums, queues, n, digit</span>) </span>&#123;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</div><div class="line">            <span class="keyword">if</span> (digit == <span class="number">1</span>) &#123;</div><div class="line">                queues[nums[i]%<span class="number">10</span>].enqueue(nums[i]);</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">else</span> &#123;</div><div class="line">                queues[<span class="built_in">Math</span>.floor(nums[i] / <span class="number">10</span>)].enqueue(nums[i]);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// 从队列中收集数字</span></div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">collect</span>(<span class="params">queues, nums</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> i = <span class="number">0</span>;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> digit = <span class="number">0</span>; digit &lt; <span class="number">10</span>; digit++) &#123;</div><div class="line">            <span class="keyword">while</span> (!queues[digit].isEmpty()) &#123;</div><div class="line">                nums[i++] = queues[digit].dequeue();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">var</span> queues = [];</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</div><div class="line">        queues[i] = <span class="keyword">new</span> Queue();</div><div class="line">    &#125;</div><div class="line">    distribute(nums, queues, <span class="number">10</span>, <span class="number">1</span>);    <span class="comment">// 第一次扫描个位数</span></div><div class="line">    collect(queues, nums);</div><div class="line">    distribute(nums, queues, <span class="number">10</span>, <span class="number">10</span>);    <span class="comment">// 第二次扫描十位数</span></div><div class="line">    collect(queues, nums);</div><div class="line">    <span class="keyword">return</span> nums;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="优先队列"><a href="#优先队列" class="headerlink" title="优先队列"></a>优先队列</h2><p>在一般情况下，由于队列先进先出的特性，从队列中删除元素一定是率先入队的元素。但一些应用在删除元素时可能不必遵守这样的约定。这种应用，通常使用一种叫做优先队列的数据结构。</p>
+<p>在从优先队列中删除元素的时候需要考虑优先权的限制。我们想象一个急诊科的候诊室，当病人进入候诊室时，护士评估患者病情的程度，然后分配优先级。高优先的患者先于低优先的患者，同样优先级的患者按队列形式排序就医。</p>
+<p>于是我们存入dataStore的数据变成这样：</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Patient</span><span class="params">(name, code)</span> </span>&#123;</div><div class="line">    <span class="keyword">this</span>.name = name;</div><div class="line">    <span class="keyword">this</span>.code = code;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>code是一个整数代表优先级，这里我们定义这个数值越小优先级越高。现在我们需要定义新的dequeue()方法：遍历底层数字将优先级最高的元素，然后使用splice()方法推出元素。定义如下：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">function dequeue() &#123;</div><div class="line">    <span class="keyword">var</span> priority = <span class="keyword">this</span>.dataStore[<span class="number">0</span>].code;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.dataStore.length; i++) &#123;</div><div class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.dataStore[i].code &lt; priority) &#123;</div><div class="line">            priority = i;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.dataStore.splice(priority, <span class="number">1</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          
+            <a href="/tags/数据结构/" rel="tag"># 数据结构</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/03/07/数据结构JavaScript描述--列表/" rel="next" title="数据结构JavaScript描述--列表">
+                <i class="fa fa-chevron-left"></i> 数据结构JavaScript描述--列表
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/03/08/数据结构JavaScript描述--栈/" rel="prev" title="数据结构JavaScript描述--栈">
+                数据结构JavaScript描述--栈 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/03/08/数据结构JavaScript描述--队列/"
+           data-title="数据结构JavaScript描述--队列" data-url="http://zzfe.top/2016/03/08/数据结构JavaScript描述--队列/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://ww1.sinaimg.cn/large/73797f53gw1f8ou875kqmj20gv0gvabl.jpg"
+               alt="Zz" />
+          <p class="site-author-name" itemprop="name">Zz</p>
+           
+              <p class="site-description motion-element" itemprop="description">左右摇摆的前端</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/tears330" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/zhang-zhong-yuan-83/activities" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-bold"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#队列的DST"><span class="nav-number">1.</span> <span class="nav-text">队列的DST</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#队列的实现"><span class="nav-number">2.</span> <span class="nav-text">队列的实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用队列对数组进行排序"><span class="nav-number">3.</span> <span class="nav-text">使用队列对数组进行排序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#优先队列"><span class="nav-number">4.</span> <span class="nav-text">优先队列</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zz</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"zzfe"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

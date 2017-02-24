@@ -1,0 +1,781 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="JavaScript,面向对象," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="JavaScript不同于其他面向对象的类式继承模型。而是提供了原型继承模型prototype，这一方法往往被人当成缺陷诟病。当使用原型继承有时会比类式继承更加强大，但是使用往往也要复杂的多。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript面向对象-继承">
+<meta property="og:url" content="http://zzfe.top/2016/02/03/JavaScript面向对象-继承/index.html">
+<meta property="og:site_name" content="ZzFe">
+<meta property="og:description" content="JavaScript不同于其他面向对象的类式继承模型。而是提供了原型继承模型prototype，这一方法往往被人当成缺陷诟病。当使用原型继承有时会比类式继承更加强大，但是使用往往也要复杂的多。">
+<meta property="og:updated_time" content="2017-02-24T10:16:26.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JavaScript面向对象-继承">
+<meta name="twitter:description" content="JavaScript不同于其他面向对象的类式继承模型。而是提供了原型继承模型prototype，这一方法往往被人当成缺陷诟病。当使用原型继承有时会比类式继承更加强大，但是使用往往也要复杂的多。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://zzfe.top/2016/02/03/JavaScript面向对象-继承/"/>
+
+
+
+
+
+  <title> JavaScript面向对象-继承 | ZzFe </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=60875579";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ZzFe</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">记录一路热烈</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://zzfe.top/2016/02/03/JavaScript面向对象-继承/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zz">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ww1.sinaimg.cn/large/73797f53gw1f8ou875kqmj20gv0gvabl.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ZzFe">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                JavaScript面向对象-继承
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-02-03T00:00:00+08:00">
+                2016-02-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaScript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/02/03/JavaScript面向对象-继承/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/03/JavaScript面向对象-继承/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>JavaScript不同于其他面向对象的类式继承模型。而是提供了原型继承模型<code>prototype</code>，这一方法往往被人当成缺陷诟病。当使用原型继承有时会比类式继承更加强大，但是使用往往也要复杂的多。<a id="more"></a></p>
+<h2 id="类式继承"><a href="#类式继承" class="headerlink" title="类式继承"></a>类式继承</h2><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 类式继承</span></div><div class="line"><span class="comment">// 声明父类</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">SuperClass</span><span class="params">()</span> </span>&#123;</div><div class="line">	<span class="keyword">this</span>.superValue = ture;</div><div class="line">&#125;</div><div class="line"><span class="comment">// 为父类添加共有方法</span></div><div class="line">SuperClass.prototype.getSuperVal = <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</div><div class="line">	<span class="keyword">return</span> <span class="keyword">this</span>.superValue;</div><div class="line">&#125;;</div><div class="line"><span class="comment">// 声明子类</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">SubClass</span><span class="params">()</span> </span>&#123;</div><div class="line">	<span class="keyword">this</span>.subValue = <span class="literal">false</span>;</div><div class="line">&#125;</div><div class="line"><span class="comment">// 继承父类</span></div><div class="line">SubClass.prototype = <span class="keyword">new</span> SuperClass();</div><div class="line"><span class="comment">// 为子类添加公有方法</span></div><div class="line">SubClass.prototype.getSubVal = <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</div><div class="line">	<span class="keyword">return</span> <span class="keyword">this</span>.subValue;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="类式继承原理"><a href="#类式继承原理" class="headerlink" title="类式继承原理"></a>类式继承原理</h3><p>这里需要注意在类式继承中将第一个值的<em>实例</em>赋值给第二个类的原型。  </p>
+<p>SuperClass这个类中分别包含构造函数内的属性方法和原型中的属性方法。<br>类的原型对象作用是为为类的原型添加共有方法，而类本事不能直接访问这些属性和方法，需要通过<code>class.prototype</code>的形式访问。而我们实例化一个父类是，新创建的对象复制了父类构造函数的属性与方法，并且将<code>__proto__</code>指向了父类的原型对象，这样就拥有了父类原型对象的属性和方法。</p>
+<h3 id="类式继承缺陷"><a href="#类式继承缺陷" class="headerlink" title="类式继承缺陷"></a>类式继承缺陷</h3><ul>
+<li><p>由于子类通过自身原型prototype对父类实例化，继承了父类。如果父类中共有属性为引用类型，就会在子类中被所有实例共用。因此一个子类实例更改从父类构造函数中继承的共有属性，就会影响其他子类。示例如下：  </p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">SuperClass</span>(<span class="params"></span>) </span>&#123;</div><div class="line"><span class="keyword">this</span>.arr = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>];</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">SubClass</span>(<span class="params"></span>) </span>&#123;&#125;</div><div class="line">SubClass.prototype = <span class="keyword">new</span> SuperClass();</div><div class="line"><span class="keyword">var</span> obj1 = <span class="keyword">new</span> SubClass();</div><div class="line"><span class="keyword">var</span> obj2 = <span class="keyword">new</span> SubClass();</div><div class="line"><span class="built_in">console</span>.log(obj1.arr);		<span class="comment">// [1,2,3,4]</span></div><div class="line">obj1.arr.push(<span class="number">5</span>);</div><div class="line"><span class="built_in">console</span>.log(obj2.arr);		<span class="comment">// [1,2,3,4,5]</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>由于子类实现的继承是通过自己prototype对父类的实例化实现，因此在创建父类时，是无法向父类传递参数的，因此在父类实例化时也无法对父类构造函数内属性进行初始化。</p>
+</li>
+</ul>
+<hr>
+<h2 id="构造函数继承"><a href="#构造函数继承" class="headerlink" title="构造函数继承"></a>构造函数继承</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 构造函数式继承</span></div><div class="line"><span class="comment">// 声明父类</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">SuperClass</span>(<span class="params">id</span>) </span>&#123;</div><div class="line">	<span class="comment">// 引用类型共有属性</span></div><div class="line">	<span class="keyword">this</span>.arr = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>];</div><div class="line">	<span class="comment">// 值类型共有属性</span></div><div class="line">	<span class="keyword">this</span>.id = id;</div><div class="line">&#125;</div><div class="line"><span class="comment">// 父类声明原型方法</span></div><div class="line">SuperClass.prototype.showBooks = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="keyword">this</span>.arr);</div><div class="line">&#125;</div><div class="line"><span class="comment">// 声明子类</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">SubClass</span>(<span class="params">id</span>) </span>&#123;</div><div class="line">	<span class="comment">// 继承父类</span></div><div class="line">	SuperClass.call(<span class="keyword">this</span>, id);</div><div class="line">&#125;</div><div class="line"><span class="comment">// 创建第一个子类的实例</span></div><div class="line"><span class="keyword">var</span> obj1 = <span class="keyword">new</span> SubClass(<span class="number">1</span>);</div><div class="line"><span class="keyword">var</span> obj2 = <span class="keyword">new</span> SubClass(<span class="number">2</span>);</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">// 测试代码</span></div><div class="line">obj1.arr.push(<span class="number">5</span>);</div><div class="line"><span class="built_in">console</span>.log(obj1.arr);		<span class="comment">// [1,2,3,4,5]</span></div><div class="line"><span class="built_in">console</span>.log(obj1.id);		<span class="comment">// 1</span></div><div class="line"><span class="built_in">console</span>.log(obj2.arr);		<span class="comment">// [1,2,3,4]</span></div><div class="line"><span class="built_in">console</span>.log(obj2.id);		<span class="comment">// 2</span></div></pre></td></tr></table></figure>
+<h3 id="构造函数继承原理"><a href="#构造函数继承原理" class="headerlink" title="构造函数继承原理"></a>构造函数继承原理</h3><p><code>SuperClass.call(this,id)</code>这里通过call方法来更改函数的作用环境，因此在子类中，对SuperClass调用<code>call</code>方法就是将子类中的变量在父类中执行一遍，由于父类中给<code>this</code>绑定了属性，因此子类就继承了父类中的共有属性。</p>
+<h3 id="构造函数继承缺陷"><a href="#构造函数继承缺陷" class="headerlink" title="构造函数继承缺陷"></a>构造函数继承缺陷</h3><p>构造函数继承本身并没有涉及到<code>prototype</code>，所以父类的原型方法并不会被子类所继承。而将方法放到构造函数中，则被子类所实例化的每一个对象都会单独拥有一份且不能共有，这就违反了代码复用的原则，于是有了第三种方式–组合继承。</p>
+<hr>
+<h2 id="组合式继承"><a href="#组合式继承" class="headerlink" title="组合式继承"></a>组合式继承</h2><p>类式继承通过子类<code>prototype</code>对父类原型的实例化来实现。而构造函数式继承则通过在子类的构造函数中执行一次父类的构造函数来实现。所以只要在继承中同时实现以下两点即可：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 组合式继承</span></div><div class="line"><span class="comment">// 声明父类</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">SuperClass</span>(<span class="params">name</span>) </span>&#123;</div><div class="line">	<span class="comment">// 值类型共有属性</span></div><div class="line">	<span class="keyword">this</span>.name = name;</div><div class="line">	<span class="comment">// 引用类型共有属性</span></div><div class="line">	<span class="keyword">this</span>.arr = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>];</div><div class="line">&#125;</div><div class="line"><span class="comment">// 父类原型共有方法</span></div><div class="line">SuperClass.prototype.getName = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="keyword">this</span>.name);</div><div class="line">&#125;;</div><div class="line"><span class="comment">// 声明子类</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">SubClass</span>(<span class="params">name, time</span>) </span>&#123;</div><div class="line">	<span class="comment">// 构造函数继承父类name属性</span></div><div class="line">	SuperClass.call(<span class="keyword">this</span>, name);</div><div class="line">	<span class="comment">// 子类中新增共有属性</span></div><div class="line">	<span class="keyword">this</span>.time = time;</div><div class="line">&#125;</div><div class="line"><span class="comment">// 类式继承 子类继承父类原型</span></div><div class="line">SubClass.prototype = <span class="keyword">new</span> SuperClass();</div><div class="line"><span class="comment">// 子类原型方法</span></div><div class="line">SubClass.prototype.getTime = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="keyword">this</span>.time);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>组合式继承就是在子类构造函数中执行父类的构造函数并且在子类的原型上实例化父类的组合，测试代码如下：</p>
+<figure class="highlight pony"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> obj1 = <span class="function"><span class="keyword">new</span> <span class="title">SubClass</span>("tom", <span class="number">2014</span>);</span></div><div class="line"><span class="title">obj1</span>.<span class="title">arr</span>.<span class="title">push</span>(<span class="number">5</span>);</div><div class="line"><span class="title">console</span>.<span class="title">log</span>(obj1.arr);		<span class="comment">// [1,2,3,4,5]</span></div><div class="line"><span class="title">obj1</span>.<span class="title">getName</span>();				<span class="comment">// "tom"</span></div><div class="line"><span class="title">obj1</span>.<span class="title">getTime</span>();				<span class="comment">// 2014</span></div><div class="line"></div><div class="line"><span class="title">var</span> <span class="title">obj2</span> = <span class="title">new</span> <span class="title">SubClass</span>("<span class="type">Levi</span>", <span class="number">2000</span>);</div><div class="line"><span class="title">console</span>.<span class="title">log</span>(obj2.arr);		<span class="comment">// [1,2,3,4]</span></div><div class="line"><span class="title">obj2</span>.<span class="title">getName</span>();				<span class="comment">// "Levi"</span></div><div class="line"><span class="title">obj2</span>.<span class="title">getTime</span>();				<span class="comment">// "2000"</span></div></pre></td></tr></table></figure>
+<h3 id="组合式继承缺陷"><a href="#组合式继承缺陷" class="headerlink" title="组合式继承缺陷"></a>组合式继承缺陷</h3><p>这里需要注意在<code>SuperClass.call(this, name)</code>时调用了一次父类构造函数，在<code>SubClass.prototype = new SuperClass()</code>时又一次调用了父类构造函数。因此父类构造函数被调用了两次，因此并不是最好的方式。</p>
+<hr>
+<h2 id="原型式继承"><a href="#原型式继承" class="headerlink" title="原型式继承"></a>原型式继承</h2><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 原型式继承</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">inheritObject</span><span class="params">(o)</span> </span>&#123;</div><div class="line">	<span class="comment">// 声明一个过渡函数对象</span></div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">F</span><span class="params">()</span> </span>&#123;&#125;</div><div class="line">	<span class="comment">// 过渡对象的原型继承父对象</span></div><div class="line">	F.prototype = o;</div><div class="line">	<span class="keyword">return</span> <span class="keyword">new</span> F();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="原型式继承原理"><a href="#原型式继承原理" class="headerlink" title="原型式继承原理"></a>原型式继承原理</h3><p>这种方式即对类式继承的一种封装，其中的过渡对象<code>F</code>就相当于类式继承中的子类。只不过在原型式中作为一个过渡对象出现，目的是为了返回新的实例化对象。  </p>
+<h3 id="原型式继承缺陷"><a href="#原型式继承缺陷" class="headerlink" title="原型式继承缺陷"></a>原型式继承缺陷</h3><p>如类式继承一样，通过过渡对象<code>F.prototype</code>继承的引用类型同样会被所有的实例化对象共用。代码如下：  </p>
+<figure class="highlight maxima"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">var</span> book = &#123;</div><div class="line">	name : <span class="string">"jsBook"</span>,</div><div class="line">	alikeBook : ['css','html']</div><div class="line">&#125;;</div><div class="line"><span class="built_in">var</span> newBook = inheritObject(book);</div><div class="line">newBook.name = <span class="string">"ajax"</span>;</div><div class="line">newBook.alikeBook.<span class="built_in">push</span>('xml');</div><div class="line">console.<span class="built_in">log</span>(newBook.alikeBook);			// [<span class="string">"css"</span>, <span class="string">"html"</span>, <span class="string">"xml"</span>]</div><div class="line"></div><div class="line"><span class="built_in">var</span> otherBook = inheritObject(book);</div><div class="line">otherBook.name = <span class="string">"xml"</span>;</div><div class="line">console.<span class="built_in">log</span>(otherBook.alikeBook);</div><div class="line">otherBook.alikeBook.<span class="built_in">push</span>('ajax');			// [<span class="string">"css"</span>, <span class="string">"html"</span>, <span class="string">"xml"</span>]</div><div class="line">console.<span class="built_in">log</span>(newBook.alikeBook);			// [<span class="string">"css"</span>, <span class="string">"html"</span>, <span class="string">"xml"</span>, <span class="string">"ajax"</span>]</div></pre></td></tr></table></figure>
+<hr>
+<h2 id="寄生式继承"><a href="#寄生式继承" class="headerlink" title="寄生式继承"></a>寄生式继承</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 寄生式继承</span></div><div class="line"><span class="comment">// 声明基对象</span></div><div class="line"><span class="keyword">var</span> book = &#123;</div><div class="line">	<span class="attr">name</span> : <span class="string">"jsBook"</span>，</div><div class="line">	alikeBook : [<span class="string">'css'</span>, <span class="string">'html'</span>]</div><div class="line">&#125;;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">createBook</span>(<span class="params">obj</span>) </span>&#123;</div><div class="line">	<span class="comment">// 通过原型继承方式创建新对象</span></div><div class="line">	<span class="keyword">var</span> o = <span class="keyword">new</span> inheritObject(book);</div><div class="line">	<span class="comment">// 拓展新对象</span></div><div class="line">	o.getName = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">		<span class="built_in">console</span>.log(<span class="keyword">this</span>.name);</div><div class="line">	&#125;;</div><div class="line">	<span class="comment">// 返回拓展后新对象</span></div><div class="line">	<span class="keyword">return</span> o;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="寄生式继承原理"><a href="#寄生式继承原理" class="headerlink" title="寄生式继承原理"></a>寄生式继承原理</h3><p>寄生式继承就是对原型式继承的第二次封装，并且在此之上对继承的对象进行拓展,使其可以添加新的属性和方法。</p>
+<h3 id="寄生式继承缺陷"><a href="#寄生式继承缺陷" class="headerlink" title="寄生式继承缺陷"></a>寄生式继承缺陷</h3><p>同原型式继承与类式继承一样，改变从父类继承的引用类型得知会使每一个实例化的对象的值都被改变。</p>
+<hr>
+<h2 id="寄生组合式继承"><a href="#寄生组合式继承" class="headerlink" title="寄生组合式继承"></a>寄生组合式继承</h2><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * 寄生式继承 继承原型</div><div class="line"> * 传递参数 subClass 子类</div><div class="line"> * 传递参数 superClass 父类</div><div class="line"> **/</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">inheritPrototype</span><span class="params">(subClass, superClass)</span> </span>&#123;</div><div class="line">	<span class="comment">// 复制一份父类原型副本保存在变量中</span></div><div class="line">	<span class="keyword">var</span> p = inheritObject(superClass.prototype);</div><div class="line">	<span class="comment">// 修正因为重写子类原型导致子类constructor属性被修改</span></div><div class="line">	p.constructor = subClass;</div><div class="line">	<span class="comment">// 设置子类的原型</span></div><div class="line">	subClass.prototype = p;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="寄生组合式继承原理"><a href="#寄生组合式继承原理" class="headerlink" title="寄生组合式继承原理"></a>寄生组合式继承原理</h2><p>在组合式继承中，通过构造函数继承的属性和方法是没有问题的，所以这里主要探讨通过寄生式继承，重新继承父类的原型。在构造函数继承中我们已经调用了父类的构造函数，所以我们现在所需要的仅仅是父类对象的原型。也就是父类原型对象的一个副本，也这个副本我们通过原型继承<code>inheritObject()</code>就可以得到，弹我们所复制的父类原型中<code>p.constructor</code>并不是指向<code>subClass</code>。所以我们通过<code>p.constructor = subClass</code>重写。最后将复制对象<code>p</code>赋值给子类原型<code>prototype</code>，这样子类的原型就继承了父类原型并没有使用父类的构造函数。测试代码如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 定义父类</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">SuperClass</span>(<span class="params">name</span>) </span>&#123;</div><div class="line">	<span class="keyword">this</span>.name = name;</div><div class="line">	<span class="keyword">this</span>.arr = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>];</div><div class="line">&#125;</div><div class="line"><span class="comment">// 定义父类原型方法</span></div><div class="line">SuperClass.prototype.getName = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="keyword">this</span>.name);</div><div class="line">&#125;;</div><div class="line"><span class="comment">// 定义子类</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">SubClass</span>(<span class="params">name, time</span>) </span>&#123;</div><div class="line">	SuperClass.call(<span class="keyword">this</span>, name);</div><div class="line">	<span class="keyword">this</span>.time = time;</div><div class="line">&#125;</div><div class="line"><span class="comment">// 寄生式继承父类原型</span></div><div class="line">inheritPrototype(SubClass, SuperClass);</div><div class="line"><span class="comment">// 子类原型新增方法</span></div><div class="line">SubClass.prototype.getTime = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="keyword">this</span>.time);</div><div class="line">&#125;;</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">// 测试代码</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">var</span> obj1 = <span class="keyword">new</span> SubClass(<span class="string">"tom"</span>, <span class="number">2014</span>);</div><div class="line">obj1.arr.push(<span class="number">5</span>);</div><div class="line"><span class="built_in">console</span>.log(obj1.arr);		<span class="comment">// [1,2,3,4,5]</span></div><div class="line">obj1.getName();				<span class="comment">// "tom"</span></div><div class="line">obj1.getTime();				<span class="comment">// 2014</span></div><div class="line"></div><div class="line"><span class="keyword">var</span> obj2 = <span class="keyword">new</span> SubClass(<span class="string">"Levi"</span>, <span class="number">2000</span>);</div><div class="line"><span class="built_in">console</span>.log(obj2.arr);		<span class="comment">// [1,2,3,4]</span></div><div class="line">obj2.getName();				<span class="comment">// "Levi"</span></div><div class="line">obj2.getTime();				<span class="comment">// "2000"</span></div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          
+            <a href="/tags/面向对象/" rel="tag"># 面向对象</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/11/09/First/" rel="next" title="First">
+                <i class="fa fa-chevron-left"></i> First
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/02/04/JavaScript数组类型检测/" rel="prev" title="JavaScript数组类型检测">
+                JavaScript数组类型检测 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/02/03/JavaScript面向对象-继承/"
+           data-title="JavaScript面向对象-继承" data-url="http://zzfe.top/2016/02/03/JavaScript面向对象-继承/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://ww1.sinaimg.cn/large/73797f53gw1f8ou875kqmj20gv0gvabl.jpg"
+               alt="Zz" />
+          <p class="site-author-name" itemprop="name">Zz</p>
+           
+              <p class="site-description motion-element" itemprop="description">左右摇摆的前端</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/tears330" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/zhang-zhong-yuan-83/activities" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-bold"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#类式继承"><span class="nav-number">1.</span> <span class="nav-text">类式继承</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#类式继承原理"><span class="nav-number">1.1.</span> <span class="nav-text">类式继承原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类式继承缺陷"><span class="nav-number">1.2.</span> <span class="nav-text">类式继承缺陷</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#构造函数继承"><span class="nav-number">2.</span> <span class="nav-text">构造函数继承</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#构造函数继承原理"><span class="nav-number">2.1.</span> <span class="nav-text">构造函数继承原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#构造函数继承缺陷"><span class="nav-number">2.2.</span> <span class="nav-text">构造函数继承缺陷</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#组合式继承"><span class="nav-number">3.</span> <span class="nav-text">组合式继承</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#组合式继承缺陷"><span class="nav-number">3.1.</span> <span class="nav-text">组合式继承缺陷</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#原型式继承"><span class="nav-number">4.</span> <span class="nav-text">原型式继承</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#原型式继承原理"><span class="nav-number">4.1.</span> <span class="nav-text">原型式继承原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原型式继承缺陷"><span class="nav-number">4.2.</span> <span class="nav-text">原型式继承缺陷</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#寄生式继承"><span class="nav-number">5.</span> <span class="nav-text">寄生式继承</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#寄生式继承原理"><span class="nav-number">5.1.</span> <span class="nav-text">寄生式继承原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#寄生式继承缺陷"><span class="nav-number">5.2.</span> <span class="nav-text">寄生式继承缺陷</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#寄生组合式继承"><span class="nav-number">6.</span> <span class="nav-text">寄生组合式继承</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#寄生组合式继承原理"><span class="nav-number">7.</span> <span class="nav-text">寄生组合式继承原理</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zz</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"zzfe"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

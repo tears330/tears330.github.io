@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="JavaScript,类型检测,数组," />
 
 
 
@@ -87,19 +87,16 @@
 
 
 
-<meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.
-Quick">
+<meta name="description" content="在JavaScript中如何判断变量为数组类型">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hello World">
-<meta property="og:url" content="http://zzfe.top/2017/02/24/hello-world/index.html">
+<meta property="og:title" content="JavaScript数组类型检测">
+<meta property="og:url" content="http://zzfe.top/2016/02/04/JavaScript数组类型检测/index.html">
 <meta property="og:site_name" content="ZzFe">
-<meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.
-Quick">
-<meta property="og:updated_time" content="2017-02-24T07:52:47.000Z">
+<meta property="og:description" content="在JavaScript中如何判断变量为数组类型">
+<meta property="og:updated_time" content="2017-02-24T10:16:26.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hello World">
-<meta name="twitter:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.
-Quick">
+<meta name="twitter:title" content="JavaScript数组类型检测">
+<meta name="twitter:description" content="在JavaScript中如何判断变量为数组类型">
 
 
 
@@ -127,13 +124,13 @@ Quick">
 
 
 
-  <link rel="canonical" href="http://zzfe.top/2017/02/24/hello-world/"/>
+  <link rel="canonical" href="http://zzfe.top/2016/02/04/JavaScript数组类型检测/"/>
 
 
 
 
 
-  <title> Hello World | ZzFe </title>
+  <title> JavaScript数组类型检测 | ZzFe </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -261,7 +258,7 @@ Quick">
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://zzfe.top/2017/02/24/hello-world/">
+    <link itemprop="mainEntityOfPage" href="http://zzfe.top/2016/02/04/JavaScript数组类型检测/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Zz">
@@ -282,7 +279,7 @@ Quick">
             
             
               
-                Hello World
+                JavaScript数组类型检测
               
             
           </h1>
@@ -297,8 +294,8 @@ Quick">
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-24T15:52:47+08:00">
-                2017-02-24
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-02-04T01:18:33+08:00">
+                2016-02-04
               </time>
             
 
@@ -308,6 +305,28 @@ Quick">
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaScript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -316,8 +335,8 @@ Quick">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/02/24/hello-world/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/24/hello-world/" itemprop="commentCount"></span>
+                <a href="/2016/02/04/JavaScript数组类型检测/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/04/JavaScript数组类型检测/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -343,15 +362,23 @@ Quick">
       
 
       
-        <p>Welcome to <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="http://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="http://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+        <p>在JavaScript中如何判断变量为数组类型<a id="more"></a>，一般有三种思路：</p>
+<h2 id="typeof操作符"><a href="#typeof操作符" class="headerlink" title="typeof操作符"></a>typeof操作符</h2><p>typeof操作符通常只能对<code>Function</code>,<code>String</code>,<code>Number</code>,<code>Undefined</code>进行检测，但是对Array对象并不起作用，示例如下:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> <span class="literal">null</span>);          <span class="comment">// "object"</span></div><div class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;);  <span class="comment">// "function"</span></div><div class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> <span class="string">"ZZ-FE"</span>);       <span class="comment">// "string"</span></div><div class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> <span class="number">1</span>);             <span class="comment">// "number"</span></div><div class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> a);             <span class="comment">// "undefined"</span></div><div class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> <span class="literal">undefined</span>);     <span class="comment">// "undefined"</span></div><div class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> []);            <span class="comment">// "object"</span></div><div class="line"><span class="built_in">console</span>.log(typeif &#123;<span class="attr">a</span> : <span class="string">"a"</span>&#125;);     <span class="comment">// "object"</span></div></pre></td></tr></table></figure>
+<h2 id="instanceof操作符"><a href="#instanceof操作符" class="headerlink" title="instanceof操作符"></a>instanceof操作符</h2><p>instanceof 运算符可以用来判断某个构造函数的 prototype 属性是否存在另外一个要检测对象的原型链上。也就是判断instanceof前面的对象是否是后面的类或对象的实例。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> arr = [<span class="number">1</span>,<span class="number">2</span>];</div><div class="line"><span class="built_in">console</span>.log(arr <span class="keyword">instanceof</span> <span class="built_in">Array</span>);    <span class="comment">// true</span></div></pre></td></tr></table></figure>
+<h2 id="对象自身的constructor属性"><a href="#对象自身的constructor属性" class="headerlink" title="对象自身的constructor属性"></a>对象自身的constructor属性</h2><p>constructor属性返回一个指向创建了该对象原型的函数引用。同样可以检测数组类型。</p>
+<figure class="highlight delphi"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> arr = [<span class="number">1</span>,<span class="number">2</span>];</div><div class="line">console.log(arr.<span class="keyword">constructor</span> === <span class="keyword">Array</span>);    <span class="comment">//true</span></div></pre></td></tr></table></figure>
+<h2 id="跨frame实例化对象带来的问题"><a href="#跨frame实例化对象带来的问题" class="headerlink" title="跨frame实例化对象带来的问题"></a>跨frame实例化对象带来的问题</h2><p>由于每一个frame都有自己的一套执行环境，跨frame实例化的对象彼此并不共享原型链，通过instanceof操作符和constructor属性检测的方策自然会失败。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 创建iframe并添加到DOM中</span></div><div class="line"><span class="keyword">var</span> iframe = <span class="built_in">document</span>.createElement(<span class="string">'iframe'</span>);</div><div class="line"><span class="built_in">document</span>.body.appendChild(iframe);</div><div class="line">otherArray = <span class="built_in">window</span>.frames[<span class="built_in">window</span>.frames.length - <span class="number">1</span>].Array;</div><div class="line"><span class="keyword">var</span> arr = <span class="keyword">new</span> otherArray(<span class="number">1</span>,<span class="number">2</span>);</div><div class="line"><span class="built_in">console</span>.log(arr <span class="keyword">instanceof</span> <span class="built_in">Array</span>);        <span class="comment">// false</span></div><div class="line"><span class="built_in">console</span>.log(arr.constructor === <span class="built_in">Array</span>);   <span class="comment">// false</span></div></pre></td></tr></table></figure>
+<h2 id="改进方法"><a href="#改进方法" class="headerlink" title="改进方法"></a>改进方法</h2><ul>
+<li><p><strong>Object.prototype.toString</strong><br>  首先，取得对象的一个内部属性[[Class]]，然后依据这个属性，返回一个类似于”[object Array]”的字符串作为结果。</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">isArray</span>(<span class="params">arr</span>) </span>&#123;</div><div class="line">	<span class="keyword">return</span> <span class="built_in">Object</span>.prototype.toString.call(arr) === <span class="string">"[object Array]"</span>;</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> arr = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>];</div><div class="line"><span class="built_in">console</span>.log(isArray(arr));    <span class="comment">// true</span></div></pre></td></tr></table></figure>
+</li>
+<li><p><strong>Array.isArray()</strong><br>  ECMAScript5将Array.isArray()引入JavaScript，IE9+、Firefox 4+、Safari 5+、Opera 10.5+和Chrome都实现了这个方法。  </p>
+  <figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var arr = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>];</div><div class="line">Array.isArray(arr);    <span class="comment">//true</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
 
       
     </div>
@@ -373,6 +400,16 @@ Quick">
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          
+            <a href="/tags/类型检测/" rel="tag"># 类型检测</a>
+          
+            <a href="/tags/数组/" rel="tag"># 数组</a>
+          
+        </div>
+      
 
       
         
@@ -382,8 +419,8 @@ Quick">
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/04/13/数据结构JavaScript描述--散列/" rel="next" title="数据结构JavaScript描述--散列">
-                <i class="fa fa-chevron-left"></i> 数据结构JavaScript描述--散列
+              <a href="/2016/02/03/JavaScript面向对象-继承/" rel="next" title="JavaScript面向对象-继承">
+                <i class="fa fa-chevron-left"></i> JavaScript面向对象-继承
               </a>
             
           </div>
@@ -391,6 +428,10 @@ Quick">
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/02/04/JavaScript中值类型与引用类型/" rel="prev" title="JavaScript中值类型与引用类型">
+                JavaScript中值类型与引用类型 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -416,8 +457,8 @@ Quick">
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2017/02/24/hello-world/"
-           data-title="Hello World" data-url="http://zzfe.top/2017/02/24/hello-world/">
+      <div class="ds-thread" data-thread-key="2016/02/04/JavaScript数组类型检测/"
+           data-title="JavaScript数组类型检测" data-url="http://zzfe.top/2016/02/04/JavaScript数组类型检测/">
       </div>
     
   </div>
@@ -539,7 +580,7 @@ Quick">
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Quick-Start"><span class="nav-number">1.</span> <span class="nav-text">Quick Start</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Create-a-new-post"><span class="nav-number">1.1.</span> <span class="nav-text">Create a new post</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Run-server"><span class="nav-number">1.2.</span> <span class="nav-text">Run server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Generate-static-files"><span class="nav-number">1.3.</span> <span class="nav-text">Generate static files</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Deploy-to-remote-sites"><span class="nav-number">1.4.</span> <span class="nav-text">Deploy to remote sites</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#typeof操作符"><span class="nav-number">1.</span> <span class="nav-text">typeof操作符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#instanceof操作符"><span class="nav-number">2.</span> <span class="nav-text">instanceof操作符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对象自身的constructor属性"><span class="nav-number">3.</span> <span class="nav-text">对象自身的constructor属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#跨frame实例化对象带来的问题"><span class="nav-number">4.</span> <span class="nav-text">跨frame实例化对象带来的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#改进方法"><span class="nav-number">5.</span> <span class="nav-text">改进方法</span></a></li></ol></div>
             
 
           </div>

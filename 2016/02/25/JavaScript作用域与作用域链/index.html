@@ -1,0 +1,803 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="JavaScript,作用域," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="JavaScript作用域概要作用域就是变量与函数的可访问范围，即作用域控制着变量与函数的可见性和生命周期。而在JavaScript中，作用域有三种类型：全局作用域、局部作用域、eval作用域。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript作用域与作用域链">
+<meta property="og:url" content="http://zzfe.top/2016/02/25/JavaScript作用域与作用域链/index.html">
+<meta property="og:site_name" content="ZzFe">
+<meta property="og:description" content="JavaScript作用域概要作用域就是变量与函数的可访问范围，即作用域控制着变量与函数的可见性和生命周期。而在JavaScript中，作用域有三种类型：全局作用域、局部作用域、eval作用域。">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/73797f53jw1f1dzx011q3j20m00903ys.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/73797f53jw1f1e0uhv9khj20ok0g93zm.jpg">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/73797f53jw1f1e5ggrc16j20e8082gm0.jpg">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/73797f53gw1f1jp7kf52aj20e605sglv.jpg">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/73797f53gw1f1jpg8ng2uj20ck05smxd.jpg">
+<meta property="og:updated_time" content="2017-02-24T10:16:26.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JavaScript作用域与作用域链">
+<meta name="twitter:description" content="JavaScript作用域概要作用域就是变量与函数的可访问范围，即作用域控制着变量与函数的可见性和生命周期。而在JavaScript中，作用域有三种类型：全局作用域、局部作用域、eval作用域。">
+<meta name="twitter:image" content="http://ww2.sinaimg.cn/large/73797f53jw1f1dzx011q3j20m00903ys.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://zzfe.top/2016/02/25/JavaScript作用域与作用域链/"/>
+
+
+
+
+
+  <title> JavaScript作用域与作用域链 | ZzFe </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=60875579";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ZzFe</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">记录一路热烈</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://zzfe.top/2016/02/25/JavaScript作用域与作用域链/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zz">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ww1.sinaimg.cn/large/73797f53gw1f8ou875kqmj20gv0gvabl.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ZzFe">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                JavaScript作用域与作用域链
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-02-25T13:30:24+08:00">
+                2016-02-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaScript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/02/25/JavaScript作用域与作用域链/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/25/JavaScript作用域与作用域链/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="JavaScript作用域概要"><a href="#JavaScript作用域概要" class="headerlink" title="JavaScript作用域概要"></a>JavaScript作用域概要</h2><p>作用域就是变量与函数的可访问范围，即作用域控制着变量与函数的可见性和生命周期。而在JavaScript中，作用域有三种类型：全局作用域、局部作用域、eval作用域。<a id="more"></a></p>
+<h3 id="全局作用域"><a href="#全局作用域" class="headerlink" title="全局作用域"></a>全局作用域</h3><p>在全局作用域内定义的变量从任何地方都可以访问。因为他是作用域链中的最高层/最后一个。</p>
+<ol>
+<li><p>最外层函数和在最外层定义的变量拥有全局作用域</p>
+ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> num = <span class="number">0</span>;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn1</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> str1 = <span class="string">"a"</span>;</div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">fn2</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="built_in">console</span>.log(str1);</div><div class="line">    &#125;</div><div class="line">    fn2();</div><div class="line">&#125;</div><div class="line"><span class="built_in">console</span>.log(num);     <span class="comment">// 0</span></div><div class="line"><span class="built_in">console</span>.log(str1);    <span class="comment">// 抛出错误</span></div><div class="line">fn1();    <span class="comment">// "a"</span></div><div class="line">fn2();    <span class="comment">// 抛出错误</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>所有未定义直接赋值的变量自动声明为拥有全局作用域</p>
+ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn1</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> str1 = <span class="string">"a"</span>;</div><div class="line">    str2 = <span class="string">"b"</span>;</div><div class="line">    <span class="built_in">console</span>.log(str1);</div><div class="line">&#125;</div><div class="line"><span class="built_in">console</span>.log(str1);    <span class="comment">// 脚本错误</span></div><div class="line"><span class="built_in">console</span>.log(str2);    <span class="comment">// "b"</span></div><div class="line">fn1();    <span class="comment">// "a"</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>所有window对象的内置属性都拥有全局作用域，例如windiw.name、window.location等。</p>
+</li>
+</ol>
+<h3 id="局部作用域"><a href="#局部作用域" class="headerlink" title="局部作用域"></a>局部作用域</h3><p>局部作用域只能在固定的代码片段内访问。即在函数内部使用<code>var</code>定义的代码或函数，他们只在其声明他们的函数内部可见。如1.1中代码内<code>str1</code>就是局部变量。</p>
+<h3 id="eval作用域"><a href="#eval作用域" class="headerlink" title="eval作用域"></a>eval作用域</h3><figure class="highlight openscad"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">eval('var <span class="built_in">str</span> = <span class="string">"a"</span>; console.<span class="built_in">log</span>(<span class="built_in">str</span>);');    <span class="comment">// "a"</span></div></pre></td></tr></table></figure>
+<p>eval作用域类似局部作用域，期间声明的函数和变量只在<code>eval()</code>语句内有效。</p>
+<hr>
+<h2 id="JavaScript没有块作用域"><a href="#JavaScript没有块作用域" class="headerlink" title="JavaScript没有块作用域"></a>JavaScript没有块作用域</h2><p>JavaScript没有块级作用域。因此使用<code>if(){}</code>或者<code>for(){}</code>无法创建作用域，因此变量可以互相覆盖。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> num = <span class="number">1</span>;</div><div class="line">    <span class="keyword">if</span> (<span class="literal">true</span>) &#123;</div><div class="line">        <span class="keyword">var</span> str1 = <span class="string">"a"</span>;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">3</span>; i++) &#123;</div><div class="line">            num += i;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="built_in">console</span>.log(num);    <span class="comment">// 4</span></div><div class="line">    <span class="built_in">console</span>.log(str);    <span class="comment">// "a"</span></div><div class="line">    <span class="built_in">console</span>.log(i);      <span class="comment">// 3</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>代码执行时，在<code>if(){}</code>和<code>for(){}</code>的外部认可以访问到变量<code>str</code>和<code>i</code>的值，因为JavaScript中没有块级作用域。</p>
+<hr>
+<h2 id="JavaScript作用域链"><a href="#JavaScript作用域链" class="headerlink" title="JavaScript作用域链"></a>JavaScript作用域链</h2><p>在JavaScript中，函数也是对象。而函数对象也和其他对象一样，拥有可以通过代码访问的属性和一系列仅供JavaScript引擎访问的内部属性。其中一个内部属性是<code>[Scope]</code>，有ECMA-262第三版定义，该内部属性包含了函数被创建的作用域中对象的集合，这个集合就是<strong>作用域链</strong>，他决定了所创建的函数可以访问那些数据。</p>
+<p>当一个函数被创建后，他的作用域链会被创建此函数作用域中可访问的对象填充。</p>
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">function</span> <span class="title">add</span>(sum1, sum2) &#123;</div><div class="line">    <span class="keyword">return</span> <span class="type">sum1+sum2</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>当add函数创建时，他的作用域链会填入一个全局对象，该对象包含了所有的全局变量。</p>
+<p><img src="http://ww2.sinaimg.cn/large/73797f53jw1f1dzx011q3j20m00903ys.jpg" alt="add的[scope]部分"></p>
+<p>函数add的作用域会在执行时用到，当执行以下代码时：</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> temp = <span class="keyword">add</span>(<span class="number">2</span>,<span class="number">4</span>);</div></pre></td></tr></table></figure>
+<p>执行此函数会创建一个称为<code>运行期上下文(execution context)</code>的内部对象，运行期上下文定义了函数执行时的环境。每一个运行期上下文都有自己的作用域链，用于标识符解析。当运行期上下文被创建是，它的作用域链初始化为当前运行函数<code>[[Scope]]</code>所包含的对象。</p>
+<p>这些值按照他们出现在函数中的顺序被复制到运行期上下文的作用域链中。他们共同组成了一个新的对象，叫做<code>活动对象(Activation object)</code>，该对象包含了当前运行函数的所有局部变量、命名参数、参数集合以及this,然后此对象会被推入作用域链的最前端，当运行期上下文被销毁，活动对象也随之被销毁。</p>
+<p><img src="http://ww1.sinaimg.cn/large/73797f53jw1f1e0uhv9khj20ok0g93zm.jpg" alt="此时新的作用域链"></p>
+<p>在函数执行过程中，每遇到一个变量，都会经历一次标识符解析过程以决定从哪里获取和储存数据。该过程从作用域链头部，也就是活动对象开始搜索，查找同名的标识符，如果找到了就是用这个标识符对应的变量，如果没有找到继续搜索作用域链中的下一个对象，如果搜索完所有对象都未找到，则认为该标识符没有定义。</p>
+<hr>
+<h2 id="函数定义时确定作用域，而非调用时确定"><a href="#函数定义时确定作用域，而非调用时确定" class="headerlink" title="函数定义时确定作用域，而非调用时确定"></a>函数定义时确定作用域，而非调用时确定</h2><p>在ECMA262中有如下描述：</p>
+<blockquote>
+<p>任何执行上下文时刻的作用域，都是由作用域链(scope chain)来实现。</p>
+<p>在一个函数被定义的时候，会将它定义时刻的scope chain链接到这个对象的<code>[[scope]]</code>属性。</p>
+<p>在一个函数对象被调用的时候，会创建一个活动对象，然后对于每一个函数的形参，都命名为该活动对象的命名属性，然后将这个活动对象作为此时的作用域链最前端，并将这个函数对象的[[scope]]加入带作用域链中。</p>
+</blockquote>
+<p>我们来看如下代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">factory</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> name = <span class="string">"tom"</span>;</div><div class="line">    <span class="keyword">var</span> intro = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="built_in">console</span>.log(name);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> intro;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">app</span>(<span class="params">para</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> name = para;</div><div class="line">    <span class="keyword">var</span> func = factory();</div><div class="line">    func();</div><div class="line">&#125;</div><div class="line">app(<span class="string">"Levi"</span>);</div></pre></td></tr></table></figure>
+<p>在调用app函数时，此时的作用域链是由<code>app activation object-&gt;global object</code>构成。<br>在刚进入app函数体时，如下图所示：</p>
+<p><img src="http://ww2.sinaimg.cn/large/73797f53jw1f1e5ggrc16j20e8082gm0.jpg" alt="此时的作用域链"></p>
+<p>当调用进入factory函数体的时候，此时factory的作用域链为：</p>
+<p><img src="http://ww2.sinaimg.cn/large/73797f53gw1f1jp7kf52aj20e605sglv.jpg" alt=""></p>
+<p>此时的作用域链中，并不包含app的活动对象。</p>
+<p>在定义intro函数时，intro函数的作用域链为：</p>
+<p><img src="http://ww2.sinaimg.cn/large/73797f53gw1f1jpg8ng2uj20ck05smxd.jpg" alt=""></p>
+<p>从factory返回以后，在app体内调用intor时，发生标识符解析。此时作用域链：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="string">[[scope chain]]</span> = [</div><div class="line">&#123;</div><div class="line">    intro call object</div><div class="line">&#125;,&#123;</div><div class="line">    name : <span class="string">"tom"</span>,</div><div class="line">    intor: undefined</div><div class="line">&#125;,&#123;</div><div class="line">    window call object</div><div class="line">&#125;</div><div class="line">]</div></pre></td></tr></table></figure>
+<p>我们可以看到此时的作用域链中<strong>没有包含factory活动对象</strong>。所以，name标识符的解析结果应该是factory中的name属性。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          
+            <a href="/tags/作用域/" rel="tag"># 作用域</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/02/09/JavaScript正则表达式/" rel="next" title="JavaScript正则表达式">
+                <i class="fa fa-chevron-left"></i> JavaScript正则表达式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/03/03/JavaScript原型与原型链/" rel="prev" title="JavaScript原型与原型链">
+                JavaScript原型与原型链 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/02/25/JavaScript作用域与作用域链/"
+           data-title="JavaScript作用域与作用域链" data-url="http://zzfe.top/2016/02/25/JavaScript作用域与作用域链/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://ww1.sinaimg.cn/large/73797f53gw1f8ou875kqmj20gv0gvabl.jpg"
+               alt="Zz" />
+          <p class="site-author-name" itemprop="name">Zz</p>
+           
+              <p class="site-description motion-element" itemprop="description">左右摇摆的前端</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/tears330" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/zhang-zhong-yuan-83/activities" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-bold"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#JavaScript作用域概要"><span class="nav-number">1.</span> <span class="nav-text">JavaScript作用域概要</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#全局作用域"><span class="nav-number">1.1.</span> <span class="nav-text">全局作用域</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#局部作用域"><span class="nav-number">1.2.</span> <span class="nav-text">局部作用域</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#eval作用域"><span class="nav-number">1.3.</span> <span class="nav-text">eval作用域</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JavaScript没有块作用域"><span class="nav-number">2.</span> <span class="nav-text">JavaScript没有块作用域</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JavaScript作用域链"><span class="nav-number">3.</span> <span class="nav-text">JavaScript作用域链</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#函数定义时确定作用域，而非调用时确定"><span class="nav-number">4.</span> <span class="nav-text">函数定义时确定作用域，而非调用时确定</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zz</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"zzfe"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

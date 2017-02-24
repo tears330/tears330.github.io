@@ -1,0 +1,780 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="JavaScript,原型," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="在JavaScript中并不包含传统的类式继承模型，而是使用了原型(prototype)模型。这种方式的继承模型往往比传统的类式继承还要强大，但是实现则要复杂的多。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript原型与原型链">
+<meta property="og:url" content="http://zzfe.top/2016/03/03/JavaScript原型与原型链/index.html">
+<meta property="og:site_name" content="ZzFe">
+<meta property="og:description" content="在JavaScript中并不包含传统的类式继承模型，而是使用了原型(prototype)模型。这种方式的继承模型往往比传统的类式继承还要强大，但是实现则要复杂的多。">
+<meta property="og:updated_time" content="2017-02-24T10:16:26.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JavaScript原型与原型链">
+<meta name="twitter:description" content="在JavaScript中并不包含传统的类式继承模型，而是使用了原型(prototype)模型。这种方式的继承模型往往比传统的类式继承还要强大，但是实现则要复杂的多。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://zzfe.top/2016/03/03/JavaScript原型与原型链/"/>
+
+
+
+
+
+  <title> JavaScript原型与原型链 | ZzFe </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=60875579";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ZzFe</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">记录一路热烈</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://zzfe.top/2016/03/03/JavaScript原型与原型链/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zz">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ww1.sinaimg.cn/large/73797f53gw1f8ou875kqmj20gv0gvabl.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ZzFe">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                JavaScript原型与原型链
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-03-03T17:01:23+08:00">
+                2016-03-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaScript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/03/03/JavaScript原型与原型链/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/03/JavaScript原型与原型链/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在JavaScript中并不包含传统的类式继承模型，而是使用了原型(prototype)模型。这种方式的继承模型往往比传统的类式继承还要强大，但是实现则要复杂的多。<a id="more"></a></p>
+<hr>
+<h2 id="原型"><a href="#原型" class="headerlink" title="原型"></a>原型</h2><h3 id="什么是原型"><a href="#什么是原型" class="headerlink" title="什么是原型"></a>什么是原型</h3><p>原型是一个对象，而其他的对象可以通过它实现属性继承。</p>
+<p>而一个对象的真正原型是被对象内部的[[Prototype]]属性所持有。在ECMA中引入了标准对象原型访问器<code>Object.getPrototype(object)</code>，但知道现在只有Firefox和chrome实现了此访问器。而除了IE，其他浏览器都支持非标准访问器<code>_proto_</code>。而如果两者都不起作用，我们则需要通过对象的构造函数中找到他的原型属性：<code>Object.constructor.prototype</code>。</p>
+<h3 id="原型的使用方式"><a href="#原型的使用方式" class="headerlink" title="原型的使用方式"></a>原型的使用方式</h3><h4 id="为对象添加方法"><a href="#为对象添加方法" class="headerlink" title="为对象添加方法"></a>为对象添加方法</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> Calculator = <span class="function"><span class="keyword">function</span> (<span class="params">num1, num2</span>) </span>&#123;</div><div class="line">    <span class="keyword">this</span>.num1 = num1;</div><div class="line">    <span class="keyword">this</span>.num2 = num2;</div><div class="line">&#125;;</div><div class="line"><span class="comment">// 通过prototype添加方法</span></div><div class="line">Calculator.prototype = &#123;</div><div class="line">    <span class="attr">add</span>: <span class="function"><span class="keyword">function</span> (<span class="params">x, y</span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> x + y;</div><div class="line">    &#125;,</div><div class="line">    </div><div class="line">    <span class="attr">sub</span>: <span class="function"><span class="keyword">function</span> (<span class="params">x, y</span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> x - y;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="built_in">console</span>.log(<span class="keyword">new</span> Calculator().add(<span class="number">1</span>,<span class="number">2</span>));</div></pre></td></tr></table></figure>
+<p>在以上代码中，我们通过给Calculator对象中的prototype属性赋值对象字面量设定对象的原型。但是通过这种方式设定的方法是暴露在外部环境下的。例如，我们可以通过<code>Calculator.prototype.add</code>来随时访问和修改这个方法。</p>
+<h4 id="试试封装"><a href="#试试封装" class="headerlink" title="试试封装"></a>试试封装</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">Calculator.prototype = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    add = <span class="function"><span class="keyword">function</span> (<span class="params">x, y</span>) </span>&#123;</div><div class="line">        showResult(x + y);</div><div class="line">    &#125;,</div><div class="line">    sub = <span class="function"><span class="keyword">function</span> (<span class="params">x, y</span>) </span>&#123;</div><div class="line">        showResult(x - y);</div><div class="line">    &#125;,</div><div class="line">    showResult = <span class="function"><span class="keyword">function</span>(<span class="params">result</span>) </span>&#123;</div><div class="line">        <span class="built_in">console</span>.log(result);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> &#123;</div><div class="line">        <span class="attr">add</span>: add,</div><div class="line">        <span class="attr">sub</span>: sub</div><div class="line">    &#125;</div><div class="line">&#125; ();</div></pre></td></tr></table></figure>
+<p>在以上代码中我们为<code>prototype</code>赋值时，使用function立即执行的表达式赋值。这样我们就可以封装私有方法，并将将希望公开的方法通过return的形式暴露出来，以达到public/private的效果。</p>
+<h4 id="分步声明"><a href="#分步声明" class="headerlink" title="分步声明"></a>分步声明</h4><p>上述的两种方法都是一次性的设置了源性对象，如果我们想要分开设置原型的每一个属性该如何做？</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> BaseCalculator = <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">this</span>.num1 = <span class="number">2</span>;</div><div class="line">&#125;;</div><div class="line">BaseCalculator.prototype.add = <span class="function"><span class="keyword">function</span><span class="params">(x, y)</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> x + y;</div><div class="line">&#125;;</div><div class="line">BaseCalculator.prototype.sub = <span class="function"><span class="keyword">function</span><span class="params">(x, y)</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> x - y;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>首先，我们声明了一个BaseCalculator对象，在构造函数中初始化一个num1属性，然后通过原型分别设置两个function。现在我们将BaseCalculator对象设置到Calculator的原型上。</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> Calculator = <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">this</span>.num2 = <span class="number">3</span>;</div><div class="line">&#125;;</div><div class="line">Calculator.prototype = <span class="keyword">new</span> BaseCalculator();</div></pre></td></tr></table></figure>
+<p>我们可以看到Calculator的原型指向BaseCalculator的一个实例上，这样我们就继承了BaseCalculator上的属性和方法。这就是JavaScript继承方法中的类式继承，关于类式继承的优缺点以及原理可以参考这篇文章<a href="http://zzfe.top/2016/02/03/JavaScript%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1-%E7%BB%A7%E6%89%BF/">JavaScript面向对象-继承</a>。</p>
+<p>如果我不想让Calculator访问到BaseCalculator中构造函数的num1属性，只需要将BaseCalculator的原型赋值给Calculator的原型：</p>
+<figure class="highlight elm"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="type">Calculator</span>.proto<span class="keyword">type</span> = <span class="type">BaseCalculator</span>.prototype;</div></pre></td></tr></table></figure>
+<h4 id="重写原型"><a href="#重写原型" class="headerlink" title="重写原型"></a>重写原型</h4><p>在使用第三方类库的时候，往往他们定义的原型方法并不能满足实际需求，但又不能离开这个类库。所以我们需要重写他们原型中一个或多个的属性或方法。在前面的例子中我们可以通过声明同样的add方法来覆盖之前的方法。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Calculator.prototype.add = <span class="function"><span class="keyword">function</span>(<span class="params">x, y</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> x + y + <span class="keyword">this</span>.num2;</div><div class="line">&#125;;</div><div class="line"><span class="built_in">console</span>.log(<span class="keyword">new</span> Calculator().add(<span class="number">1</span>,<span class="number">2</span>));    <span class="comment">// 6</span></div></pre></td></tr></table></figure>
+<hr>
+<h2 id="原型链"><a href="#原型链" class="headerlink" title="原型链"></a>原型链</h2><p>我们先看一段代码:</p>
+<figure class="highlight elm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="title">function</span> <span class="type">Foo</span>() &#123;</div><div class="line">    this.value = <span class="number">1</span>;</div><div class="line">&#125;</div><div class="line"><span class="type">Foo</span>.proto<span class="keyword">type</span> = &#123;</div><div class="line">    method: function() &#123;&#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="title">function</span> <span class="type">Bar</span>() &#123;&#125;</div><div class="line"><span class="type">Bar</span>.proto<span class="keyword">type</span> = new <span class="type">Foo</span>();</div><div class="line"><span class="type">Bar</span>.proto<span class="keyword">type</span>.foo = "<span class="type">Hello</span>";</div><div class="line"></div><div class="line">// 修正<span class="type">Bar</span>.proto<span class="keyword">type</span>.constructor为<span class="type">Bar</span>本身</div><div class="line"><span class="type">Bar</span>.proto<span class="keyword">type</span>.constructor = <span class="type">Bar</span>;</div><div class="line"></div><div class="line">// 测试代码</div><div class="line"><span class="title">var</span> test = new <span class="type">Bar</span>();</div><div class="line"></div><div class="line">// test的原型链为</div><div class="line"><span class="title">test</span> [<span class="type">Bar</span>的实例]</div><div class="line">    |-&gt;<span class="type">Bar</span>.proto<span class="keyword">type</span> [<span class="type">Foo</span>实例]</div><div class="line">       <span class="type">Bar</span>.proto<span class="keyword">type</span>.foo = "<span class="type">Hello</span>"</div><div class="line">        |-&gt;<span class="type">Foo</span>.proto<span class="keyword">type</span></div><div class="line">           &#123;method....&#125;</div><div class="line">           |-&gt;<span class="type">Object</span>.proto<span class="keyword">type</span></div><div class="line">              &#123;method....&#125;</div></pre></td></tr></table></figure>
+<p>在上面的示例中，test对象从<code>Bar.prototype</code>和<code>Foo.prototype</code>一路继承下来，因此，他能访问Foo的原型方法method和构造器内属性value。但注意一点，<code>new Bar()</code>并不会创建新的Foo实例，只是在重复使用原型上的实例。因此，所用Bar实例共享相同的value属性。</p>
+<h3 id="属性查找"><a href="#属性查找" class="headerlink" title="属性查找"></a>属性查找</h3><p>当查找一个对象的属性时，JavaScript引擎会向上遍历原型链，直到找到该名称的属性为止。如果直至原型链顶部<code>Object.prototype</code>仍没有找到该名称属性，则返回undefined。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> foo = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">this</span>.add = <span class="function"><span class="keyword">function</span>(<span class="params">x, y</span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> x + y;</div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line">foo.prototype.add = <span class="function"><span class="keyword">function</span>(<span class="params">x, y</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> x + y + <span class="number">10</span>;</div><div class="line">&#125;;</div><div class="line"><span class="keyword">var</span> test = <span class="keyword">new</span> foo();</div><div class="line"><span class="built_in">console</span>.log(test.add(<span class="number">1</span>,<span class="number">2</span>));    <span class="comment">// 3</span></div></pre></td></tr></table></figure>
+<p>我们可以看到返回的值是3，而不是10。也就是说当我我们调用<code>test.add()</code>方法时，首先会查找自身的方法，然后再沿着原型链向上查找。</p>
+<h4 id="不能为原型赋值基础类型值"><a href="#不能为原型赋值基础类型值" class="headerlink" title="不能为原型赋值基础类型值"></a>不能为原型赋值基础类型值</h4><p>需要注意我们可以为原型赋值任何类型的对象，但是不能赋值基础类型的值。</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> Foo = <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;&#125;</div><div class="line">Foo.prototype = <span class="number">1</span>;    <span class="comment">// 无效</span></div></pre></td></tr></table></figure>
+<hr>
+<h3 id="hasOwnProperty函数"><a href="#hasOwnProperty函数" class="headerlink" title="hasOwnProperty函数"></a>hasOwnProperty函数</h3><p><code>hasOwnProperty</code>是<code>Object.prototype</code>上的一个方法，他可以判断一个对象是否包含自定义属性而不是原型链上的属性。正因如此，hasOwnProperty是唯一一个处理属性但是不查找原型链的函数。</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">Object.prototype.bar = <span class="number">1</span>;</div><div class="line">var foo = &#123;goo : undefinded&#125;;</div><div class="line"></div><div class="line">foo.bar;    <span class="regexp">//</span> <span class="number">1</span></div><div class="line"><span class="string">'bar'</span> <span class="keyword">in</span> foo;    <span class="regexp">//</span> <span class="keyword">true</span></div><div class="line"></div><div class="line">foo.hasOwnProperty(<span class="string">'bar'</span>);    <span class="regexp">//</span> <span class="keyword">false</span></div><div class="line">foo.hasOwnProperty(<span class="string">'goo'</span>);    <span class="regexp">//</span> <span class="keyword">true</span></div></pre></td></tr></table></figure>
+<p>我们可以看到<code>hasOwnProperty()</code>不同于<code>in</code>操作符，它并没有向上查找原型链。这才遍历对象属性时十分有用。</p>
+<p>但有一个问题，JavaScript不会保护hasOwnProperty方法被非法占用，因此如果一个对象碰巧存在这个属性或方法，只能通过外部的hasOwnProoerty方法来获取正确结果。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> foo = &#123;</div><div class="line">    <span class="attr">hasOwnProperty</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">    &#125;,</div><div class="line">    <span class="attr">bar</span>: <span class="string">"Hello"</span></div><div class="line">&#125;;</div><div class="line">foo.hasOwnProperty(<span class="string">'bar'</span>);    <span class="comment">// false</span></div><div class="line"><span class="built_in">Object</span>.hasOwnProperty.call(foo, <span class="string">'bar'</span>);    <span class="comment">// true</span></div></pre></td></tr></table></figure>
+<p>当我们想遍历对象本身上的属性时，需要将<code>for in</code>与<code>hasOwnProperty()</code>同时使用：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i <span class="keyword">in</span> foo) &#123;</div><div class="line">    <span class="keyword">if</span> (foo.hasOwnProperty(i)) &#123;</div><div class="line">        <span class="built_in">console</span>.log(i);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          
+            <a href="/tags/原型/" rel="tag"># 原型</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/02/25/JavaScript作用域与作用域链/" rel="next" title="JavaScript作用域与作用域链">
+                <i class="fa fa-chevron-left"></i> JavaScript作用域与作用域链
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/03/06/数据结构JavaScript描述--数组/" rel="prev" title="数据结构JavaScript描述--数组">
+                数据结构JavaScript描述--数组 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/03/03/JavaScript原型与原型链/"
+           data-title="JavaScript原型与原型链" data-url="http://zzfe.top/2016/03/03/JavaScript原型与原型链/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://ww1.sinaimg.cn/large/73797f53gw1f8ou875kqmj20gv0gvabl.jpg"
+               alt="Zz" />
+          <p class="site-author-name" itemprop="name">Zz</p>
+           
+              <p class="site-description motion-element" itemprop="description">左右摇摆的前端</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/tears330" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/zhang-zhong-yuan-83/activities" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-bold"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#原型"><span class="nav-number">1.</span> <span class="nav-text">原型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是原型"><span class="nav-number">1.1.</span> <span class="nav-text">什么是原型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原型的使用方式"><span class="nav-number">1.2.</span> <span class="nav-text">原型的使用方式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#为对象添加方法"><span class="nav-number">1.2.1.</span> <span class="nav-text">为对象添加方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#试试封装"><span class="nav-number">1.2.2.</span> <span class="nav-text">试试封装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分步声明"><span class="nav-number">1.2.3.</span> <span class="nav-text">分步声明</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#重写原型"><span class="nav-number">1.2.4.</span> <span class="nav-text">重写原型</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#原型链"><span class="nav-number">2.</span> <span class="nav-text">原型链</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#属性查找"><span class="nav-number">2.1.</span> <span class="nav-text">属性查找</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#不能为原型赋值基础类型值"><span class="nav-number">2.1.1.</span> <span class="nav-text">不能为原型赋值基础类型值</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hasOwnProperty函数"><span class="nav-number">2.2.</span> <span class="nav-text">hasOwnProperty函数</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zz</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"zzfe"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

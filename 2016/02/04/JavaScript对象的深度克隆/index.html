@@ -1,0 +1,736 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="JavaScript,深度克隆," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="JavaScript中一切实例都是对象，但是对象之间有所不同，分为基本类型和引用类型。基本类型就是常说的5中String,Number,Boolean,Undefined,Null。而引用类型往往指的是Object，Array，Function等等。
+而在使用中，两者的最显著的差异就是复制克隆。在JavaScript中值类型与引用类型中示例已经展示了当对引用对象直接赋值时，修改其他被赋值变量同样会">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript对象的深度克隆">
+<meta property="og:url" content="http://zzfe.top/2016/02/04/JavaScript对象的深度克隆/index.html">
+<meta property="og:site_name" content="ZzFe">
+<meta property="og:description" content="JavaScript中一切实例都是对象，但是对象之间有所不同，分为基本类型和引用类型。基本类型就是常说的5中String,Number,Boolean,Undefined,Null。而引用类型往往指的是Object，Array，Function等等。
+而在使用中，两者的最显著的差异就是复制克隆。在JavaScript中值类型与引用类型中示例已经展示了当对引用对象直接赋值时，修改其他被赋值变量同样会">
+<meta property="og:updated_time" content="2017-02-24T10:16:26.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JavaScript对象的深度克隆">
+<meta name="twitter:description" content="JavaScript中一切实例都是对象，但是对象之间有所不同，分为基本类型和引用类型。基本类型就是常说的5中String,Number,Boolean,Undefined,Null。而引用类型往往指的是Object，Array，Function等等。
+而在使用中，两者的最显著的差异就是复制克隆。在JavaScript中值类型与引用类型中示例已经展示了当对引用对象直接赋值时，修改其他被赋值变量同样会">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://zzfe.top/2016/02/04/JavaScript对象的深度克隆/"/>
+
+
+
+
+
+  <title> JavaScript对象的深度克隆 | ZzFe </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=60875579";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ZzFe</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">记录一路热烈</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://zzfe.top/2016/02/04/JavaScript对象的深度克隆/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zz">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ww1.sinaimg.cn/large/73797f53gw1f8ou875kqmj20gv0gvabl.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ZzFe">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                JavaScript对象的深度克隆
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-02-04T23:40:56+08:00">
+                2016-02-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaScript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/02/04/JavaScript对象的深度克隆/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/04/JavaScript对象的深度克隆/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>JavaScript中一切实例都是对象，但是对象之间有所不同，分为基本类型和引用类型。基本类型就是常说的5中String,Number,Boolean,Undefined,Null。而引用类型往往指的是Object，Array，Function等等。</p>
+<p>而在使用中，两者的最显著的差异就是复制克隆。在<a href="http://zzfe.top/2016/02/04/JavaScript%E4%B8%AD%E5%80%BC%E7%B1%BB%E5%9E%8B%E4%B8%8E%E5%BC%95%E7%94%A8%E7%B1%BB%E5%9E%8B/">JavaScript中值类型与引用类型</a>中示例已经展示了当对引用对象直接赋值时，修改其他被赋值变量同样会造成当前被赋值变量修改(因为两个变量指向了同一段内存空间)。<a id="more"></a></p>
+<p>解决方法如下：</p>
+<figure class="highlight qml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 浅度对象克隆</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">cloneObject</span>(<span class="params">object</span>) </span>&#123;</div><div class="line">	<span class="comment">// 新建临时变量保存目标对象拷贝</span></div><div class="line">	<span class="built_in">var</span> copyObject = &#123;&#125;;</div><div class="line">	<span class="comment">// 遍历目标对象中所有属性方法并拷贝到临时变量</span></div><div class="line">	<span class="keyword">for</span> (i <span class="keyword">in</span> object) &#123;</div><div class="line">		copyObject[i] = object[i];</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> copyObject;</div><div class="line">&#125;</div><div class="line"><span class="built_in">var</span> obj1 = &#123;</div><div class="line">	<span class="attribute">id:</span><span class="string"> 1,</span></div><div class="line">	name: <span class="string">"Levi"</span></div><div class="line">&#125;;</div><div class="line"><span class="built_in">var</span> obj2 = cloneObject(obj1);</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">// 测试代码</span></div><div class="line">obj2.name = <span class="string">"Tom"</span>;</div><div class="line"><span class="built_in">console</span>.log(obj1.name);    <span class="comment">// "Levi"</span></div><div class="line"><span class="built_in">console</span>.log(obj2.name);    <span class="comment">// "Tom"</span></div></pre></td></tr></table></figure>
+<p>但是以上方法会产生一个缺陷，就是当对象内元素的值不是基本类型的时候，同样会产生之前的问题。</p>
+<p>测试代码：</p>
+<figure class="highlight maxima"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">var</span> obj1 = &#123;</div><div class="line">	id: <span class="number">1</span>,</div><div class="line">	name: <span class="string">"Levi"</span>,</div><div class="line">	hobby: [<span class="string">"book"</span>,<span class="string">"music"</span>]</div><div class="line">&#125;;</div><div class="line"><span class="built_in">var</span> obj2 = cloneObject(obj1);</div><div class="line">obj2.hobby.<span class="built_in">push</span>(<span class="string">"run"</span>);</div><div class="line">console.<span class="built_in">log</span>(obj1.hobby);    // [<span class="string">"book"</span>, <span class="string">"music"</span>, <span class="string">"run"</span>]</div><div class="line">console.<span class="built_in">log</span>(obj2.hobby);    // [<span class="string">"book"</span>, <span class="string">"music"</span>, <span class="string">"run"</span>]</div></pre></td></tr></table></figure>
+<p>我们可以发现当改变<code>obj2.hobby</code>的值时，<code>obj1.hobby</code>的值也随之改变。所以我们需要对对象里层的元素值进行判断直到所有拷贝值均为基本类型。</p>
+<figure class="highlight nimrod"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">// 递归方式	深度对象克隆</div><div class="line">function cloneObject(<span class="keyword">object</span>) &#123;</div><div class="line">	// 判断对象类型</div><div class="line">	function isObject(obj) &#123;</div><div class="line">		<span class="keyword">return</span> <span class="type">Object</span>.prototype.toString.call(obj).slice(<span class="number">8</span> ,-<span class="number">1</span>);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="keyword">var</span> <span class="literal">result</span>,</div><div class="line">		elementType = isObject(<span class="keyword">object</span>);</div><div class="line">	</div><div class="line">	<span class="keyword">if</span> (elementType === <span class="string">"Object"</span>) &#123;</div><div class="line">		<span class="literal">result</span> = &#123;&#125;;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">else</span> <span class="keyword">if</span> (elementType === <span class="string">"Array"</span>) &#123;</div><div class="line">		<span class="literal">result</span> = [];</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">else</span> &#123;</div><div class="line">		<span class="keyword">return</span> <span class="literal">result</span>;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="keyword">for</span> (key <span class="keyword">in</span> <span class="keyword">object</span>) &#123;</div><div class="line">		<span class="keyword">var</span> copy = <span class="keyword">object</span>[key];</div><div class="line">		<span class="keyword">if</span> (isObject(copy) == <span class="string">"Object"</span> || isObject(copy) == <span class="string">"Array"</span>) &#123;</div><div class="line">			<span class="literal">result</span>[key] = arguments.callee(copy);</div><div class="line">		&#125; <span class="keyword">else</span> &#123;</div><div class="line">			<span class="literal">result</span>[key] = <span class="keyword">object</span>[key];</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="keyword">return</span> <span class="literal">result</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我们利用递归来遍历对象中的所有元素，如果是基本类型的值则直接赋值，如果为引用类型(这里注意区分Object与Array的声明方式)则继续循环直到值为基本元素在直接赋值。</p>
+<p>测试代码如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> srcObj = &#123;</div><div class="line">    <span class="attr">a</span>: <span class="number">1</span>,</div><div class="line">    <span class="attr">b</span>: &#123;</div><div class="line">        <span class="attr">b1</span>: [<span class="string">"hello"</span>, <span class="string">"hi"</span>],</div><div class="line">        <span class="attr">b2</span>: <span class="string">"JavaScript"</span></div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"><span class="keyword">var</span> abObj = srcObj;</div><div class="line"><span class="keyword">var</span> tarObj = cloneObject(srcObj);</div><div class="line"></div><div class="line">srcObj.a = <span class="number">2</span>;</div><div class="line">srcObj.b.b1[<span class="number">0</span>] = <span class="string">"Hello"</span>;</div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(abObj.a);    <span class="comment">// 2</span></div><div class="line"><span class="built_in">console</span>.log(abObj.b.b1[<span class="number">0</span>]);    <span class="string">"Hello"</span></div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(tarObj.a);      <span class="comment">// 1</span></div><div class="line"><span class="built_in">console</span>.log(tarObj.b.b1[<span class="number">0</span>]);    <span class="comment">// "hello"</span></div></pre></td></tr></table></figure>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          
+            <a href="/tags/深度克隆/" rel="tag"># 深度克隆</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/02/04/JavaScript中值类型与引用类型/" rel="next" title="JavaScript中值类型与引用类型">
+                <i class="fa fa-chevron-left"></i> JavaScript中值类型与引用类型
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/02/05/JavaScript数组去重/" rel="prev" title="JavaScript数组去重">
+                JavaScript数组去重 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/02/04/JavaScript对象的深度克隆/"
+           data-title="JavaScript对象的深度克隆" data-url="http://zzfe.top/2016/02/04/JavaScript对象的深度克隆/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://ww1.sinaimg.cn/large/73797f53gw1f8ou875kqmj20gv0gvabl.jpg"
+               alt="Zz" />
+          <p class="site-author-name" itemprop="name">Zz</p>
+           
+              <p class="site-description motion-element" itemprop="description">左右摇摆的前端</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/tears330" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/zhang-zhong-yuan-83/activities" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-bold"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zz</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"zzfe"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

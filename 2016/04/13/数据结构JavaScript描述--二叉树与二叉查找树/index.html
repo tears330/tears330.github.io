@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="JavaScript,数据结构," />
 
 
 
@@ -87,19 +87,18 @@
 
 
 
-<meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.
-Quick">
+<meta name="description" content="树是一种非线性的数据结构，以分层的方式存储数据。树被用来存储具有层级关系的数据，例如文件系统中的文件。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hello World">
-<meta property="og:url" content="http://zzfe.top/2017/02/24/hello-world/index.html">
+<meta property="og:title" content="数据结构JavaScript描述--二叉树和二叉查找树">
+<meta property="og:url" content="http://zzfe.top/2016/04/13/数据结构JavaScript描述--二叉树与二叉查找树/index.html">
 <meta property="og:site_name" content="ZzFe">
-<meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.
-Quick">
-<meta property="og:updated_time" content="2017-02-24T07:52:47.000Z">
+<meta property="og:description" content="树是一种非线性的数据结构，以分层的方式存储数据。树被用来存储具有层级关系的数据，例如文件系统中的文件。">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/73797f53jw1f4h8f4wt3lj20gw09fwf1.jpg">
+<meta property="og:updated_time" content="2017-02-24T10:16:26.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hello World">
-<meta name="twitter:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.
-Quick">
+<meta name="twitter:title" content="数据结构JavaScript描述--二叉树和二叉查找树">
+<meta name="twitter:description" content="树是一种非线性的数据结构，以分层的方式存储数据。树被用来存储具有层级关系的数据，例如文件系统中的文件。">
+<meta name="twitter:image" content="http://ww4.sinaimg.cn/large/73797f53jw1f4h8f4wt3lj20gw09fwf1.jpg">
 
 
 
@@ -127,13 +126,13 @@ Quick">
 
 
 
-  <link rel="canonical" href="http://zzfe.top/2017/02/24/hello-world/"/>
+  <link rel="canonical" href="http://zzfe.top/2016/04/13/数据结构JavaScript描述--二叉树与二叉查找树/"/>
 
 
 
 
 
-  <title> Hello World | ZzFe </title>
+  <title> 数据结构JavaScript描述--二叉树和二叉查找树 | ZzFe </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -261,7 +260,7 @@ Quick">
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://zzfe.top/2017/02/24/hello-world/">
+    <link itemprop="mainEntityOfPage" href="http://zzfe.top/2016/04/13/数据结构JavaScript描述--二叉树与二叉查找树/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Zz">
@@ -282,7 +281,7 @@ Quick">
             
             
               
-                Hello World
+                数据结构JavaScript描述--二叉树和二叉查找树
               
             
           </h1>
@@ -297,8 +296,8 @@ Quick">
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-24T15:52:47+08:00">
-                2017-02-24
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-04-13T17:00:12+08:00">
+                2016-04-13
               </time>
             
 
@@ -308,6 +307,28 @@ Quick">
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaScript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -316,8 +337,8 @@ Quick">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/02/24/hello-world/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/24/hello-world/" itemprop="commentCount"></span>
+                <a href="/2016/04/13/数据结构JavaScript描述--二叉树与二叉查找树/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/13/数据结构JavaScript描述--二叉树与二叉查找树/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -343,15 +364,35 @@ Quick">
       
 
       
-        <p>Welcome to <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="http://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="http://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+        <p>树是一种非线性的数据结构，以分层的方式存储数据。树被用来存储具有层级关系的数据，例如文件系统中的文件。<a id="more"></a></p>
+<h2 id="树的定义"><a href="#树的定义" class="headerlink" title="树的定义"></a>树的定义</h2><p>树是一组以边连接的节点组成。下面的图展示了关于树的常用术语：</p>
+<p><img src="http://ww4.sinaimg.cn/large/73797f53jw1f4h8f4wt3lj20gw09fwf1.jpg" alt=""></p>
+<p>一个树最上面的节点称作根节点；如果一个节点下面连接多个节点，那么该节点成为父节点，它下面的节点叫做子节点；没有任何子节点的节点称作叶子节点。</p>
+<p>我们所讨论的二叉树是一种特殊的树，它的子节点个数不超过两个。这使他具有一些特殊的计算性质，让他们在一些操作上异常高效。</p>
+<h2 id="二叉树与二叉查找树"><a href="#二叉树与二叉查找树" class="headerlink" title="二叉树与二叉查找树"></a>二叉树与二叉查找树</h2><p>二叉树每个节点的子节点不允许超过两个。通过将子节点的个数限定为2，可以写出高效的程序在树种插入，查找，删除数据。</p>
+<p>而二叉查找树是一种特殊的二叉树，相对较小的值保存在子节点中，较大的值保存在右节点中。这一特性使得查找的效率非常高。</p>
+<h3 id="实现二叉查找树"><a href="#实现二叉查找树" class="headerlink" title="实现二叉查找树"></a>实现二叉查找树</h3><p>二叉查找树由节点组成，所有我们要定义一个对象就是Node，类似链表中节点的形式：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">function Node(<span class="keyword">data</span>, left, right) &#123;</div><div class="line">    <span class="keyword">this</span>.<span class="keyword">data</span> = <span class="keyword">data</span>;</div><div class="line">    <span class="keyword">this</span>.left = left;</div><div class="line">    <span class="keyword">this</span>.right = right;</div><div class="line">&#125;</div><div class="line"></div><div class="line">Node.prototype.show = function() &#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.<span class="keyword">data</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Node对象既保存节点数据，还储存其他节点的链接（left和right），show()方法用于显示保存在节点中的数据。</p>
+<p>现在创建一个类表示二叉查找树(BST)。我们让类只包含一个数据成员：表示根节点的Node对象。同时将根节点的data设置为null。</p>
+<p>我们需要为BST类实现insert()方法，向树中插入新节点。下面具体讲一讲这个方法的实现：</p>
+<p>首先创建一个Node对象，将数据传入该对象保存。然后检查根节点是否为空，如果空，则该节点就是根节点，否则进入下一步。</p>
+<p>我们需要遍历BST，将节点插入适当位置。算法如下：</p>
+<ol>
+<li><p>设置根节点为当前节点。</p>
+</li>
+<li><p>如果待插入的节点保存数据小于当前节点，则设新的当前节点为原节点的左节点；不过不是进入步骤4.</p>
+</li>
+<li><p>如果当前节点的左节点为null，就讲新的节点插入这个位置，退出循环；如果不是，则再次循环。</p>
+</li>
+<li><p>设新的当前节点为原节点右节点。</p>
+</li>
+<li><p>如果当前节点的右节点为null，就将新的节点插入这个位置，退出循环；如果不是，则再次循环。</p>
+</li>
+</ol>
+<p>代码如下：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">function BST() &#123;</div><div class="line">    <span class="keyword">this</span>.root = <span class="literal">null</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line">BST.prototype.insert = function(<span class="keyword">data</span>) &#123;</div><div class="line">    <span class="keyword">var</span> n = new Node(<span class="keyword">data</span>, <span class="literal">null</span>, <span class="literal">null</span>);</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.root == <span class="literal">null</span>) &#123;</div><div class="line">        <span class="keyword">this</span>.root = n;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">else</span> &#123;</div><div class="line">        <span class="keyword">var</span> current = <span class="keyword">this</span>.root;</div><div class="line">        <span class="keyword">var</span> parent;</div><div class="line">        <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</div><div class="line">            parent = current;</div><div class="line">            <span class="keyword">if</span> (<span class="keyword">data</span> &lt; current.<span class="keyword">data</span>) &#123;</div><div class="line">                current = current.left;</div><div class="line">                <span class="keyword">if</span> (current == <span class="literal">null</span>) &#123;</div><div class="line">                    parent.left == n;</div><div class="line">                    <span class="keyword">break</span>;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">else</span> &#123;</div><div class="line">                current = current.right;</div><div class="line">                <span class="keyword">if</span> (current == <span class="literal">null</span>) &#123;</div><div class="line">                    parent.right = n;</div><div class="line">                    <span class="keyword">break</span>;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="遍历二叉查找树"><a href="#遍历二叉查找树" class="headerlink" title="遍历二叉查找树"></a>遍历二叉查找树</h3><p>有三种遍历BST的方式：先序，中序和后序。中序遍历按照节点上的键值，</p>
 
       
     </div>
@@ -373,6 +414,14 @@ Quick">
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          
+            <a href="/tags/数据结构/" rel="tag"># 数据结构</a>
+          
+        </div>
+      
 
       
         
@@ -382,8 +431,8 @@ Quick">
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/04/13/数据结构JavaScript描述--散列/" rel="next" title="数据结构JavaScript描述--散列">
-                <i class="fa fa-chevron-left"></i> 数据结构JavaScript描述--散列
+              <a href="/2016/04/11/数据结构JavaScript描述--字典/" rel="next" title="数据结构JavaScript描述--字典">
+                <i class="fa fa-chevron-left"></i> 数据结构JavaScript描述--字典
               </a>
             
           </div>
@@ -391,6 +440,10 @@ Quick">
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/04/13/数据结构JavaScript描述--散列/" rel="prev" title="数据结构JavaScript描述--散列">
+                数据结构JavaScript描述--散列 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -416,8 +469,8 @@ Quick">
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2017/02/24/hello-world/"
-           data-title="Hello World" data-url="http://zzfe.top/2017/02/24/hello-world/">
+      <div class="ds-thread" data-thread-key="2016/04/13/数据结构JavaScript描述--二叉树与二叉查找树/"
+           data-title="数据结构JavaScript描述--二叉树和二叉查找树" data-url="http://zzfe.top/2016/04/13/数据结构JavaScript描述--二叉树与二叉查找树/">
       </div>
     
   </div>
@@ -539,7 +592,7 @@ Quick">
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Quick-Start"><span class="nav-number">1.</span> <span class="nav-text">Quick Start</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Create-a-new-post"><span class="nav-number">1.1.</span> <span class="nav-text">Create a new post</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Run-server"><span class="nav-number">1.2.</span> <span class="nav-text">Run server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Generate-static-files"><span class="nav-number">1.3.</span> <span class="nav-text">Generate static files</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Deploy-to-remote-sites"><span class="nav-number">1.4.</span> <span class="nav-text">Deploy to remote sites</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#树的定义"><span class="nav-number">1.</span> <span class="nav-text">树的定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二叉树与二叉查找树"><span class="nav-number">2.</span> <span class="nav-text">二叉树与二叉查找树</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#实现二叉查找树"><span class="nav-number">2.1.</span> <span class="nav-text">实现二叉查找树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#遍历二叉查找树"><span class="nav-number">2.2.</span> <span class="nav-text">遍历二叉查找树</span></a></li></ol></li></ol></div>
             
 
           </div>
