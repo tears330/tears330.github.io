@@ -259,6 +259,176 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://zzfe.top/2017/09/21/详解React生命周期/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zz">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ww1.sinaimg.cn/large/73797f53gw1f8ou875kqmj20gv0gvabl.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ZzFe">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/09/21/详解React生命周期/" itemprop="url">
+                  详解React生命周期
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-21T23:29:44+08:00">
+                2017-09-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/React/" itemprop="url" rel="index">
+                    <span itemprop="name">React</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/09/21/详解React生命周期/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/09/21/详解React生命周期/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="生命周期概述"><a href="#生命周期概述" class="headerlink" title="生命周期概述"></a>生命周期概述</h2><p>Life Circle这一概念被广泛应用于诸多框架之中，它通常描述了某个事物阶段性发生变化的规律。在React中使用Life Circle这一概念描述了组件存在于页面上的各种时期。</p>
+<p>根据React官方的定义，我们可以大致将生命周期分为两大类：</p>
+<ol>
+<li>组件被装载或卸载时</li>
+<li>组件更新时</li>
+</ol>
+<h3 id="装载与卸载过程"><a href="#装载与卸载过程" class="headerlink" title="装载与卸载过程"></a>装载与卸载过程</h3><p><strong>组件装载与卸载过程在整个组件的声明周期内只会执行一次。</strong></p>
+<h4 id="Mount-装载"><a href="#Mount-装载" class="headerlink" title="Mount-装载"></a>Mount-装载</h4><p>装载过程中的声明周期如下</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">componentName</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</div><div class="line">    constructor(props) &#123;</div><div class="line">        <span class="keyword">super</span>(props);</div><div class="line">    &#125;</div><div class="line">    componentWillMount() &#123;&#125;</div><div class="line">    componentDidMount() &#123;&#125;</div><div class="line">    render() &#123;</div><div class="line">        <span class="keyword">return</span> (</div><div class="line">            &lt;div&gt;</div><div class="line">                <span class="type">Some</span> <span class="type">Thing</span></div><div class="line">            &lt;/div&gt;</div><div class="line">        );</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里调用了<code>componentWillMount</code>与<code>componentDidMount</code>两个生命周期方法。分别是组件在执行即将装载时（<code>render</code>执行前）与装载结束(<code>render</code>执行后)的生命周期。</p>
+<p>当在<code>componentWillMount</code>中执行<code>setState</code>时，由于在<code>render</code>执行之前发生所以组件只会更新自身的<code>state</code>，并不会触发第二次的<code>render</code>。而在<code>componentDidMount</code>中使用<code>setState</code>时则会触发组件的更新使得组件再一次被<code>render</code>造成重复渲染。</p>
+<h4 id="Unmount-卸载"><a href="#Unmount-卸载" class="headerlink" title="Unmount-卸载"></a>Unmount-卸载</h4><p>组件的卸载只有一个生命周期即<code>componentWillUnmount</code>。通常被应用于清除定时器<code>clearInterval</code>，移除事件监听<code>removeEventListener</code>,防止由于闭包导致的内存泄漏。</p>
+<h3 id="组件更新过程"><a href="#组件更新过程" class="headerlink" title="组件更新过程"></a>组件更新过程</h3><p>React的核心思想之一即<code>View=F(Model)</code>,即通过数据<code>Model层</code>驱动视图<code>View层</code>的变化。而在React中通常通过两种形式改变<code>Model</code>的数据源：上层组件传递<code>Props</code>变化/自身执行了<code>setState</code>。这两种操作都会是组件触发更新相关的生命周期，并通过我们所制定的<code>F()</code>更新<code>View层</code>。</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="title">componentWillReceiveProps</span><span class="params">(nextProps)</span></span> &#123;&#125;</div><div class="line"><span class="function"><span class="title">shouldComponentUpdate</span><span class="params">(nextProps, nextState)</span></span> &#123;&#125;</div><div class="line"><span class="function"><span class="title">componentWillUpdate</span><span class="params">(nextProps, nextState)</span></span> &#123;&#125;</div><div class="line"><span class="function"><span class="title">componentDidUpdate</span><span class="params">(prevProps, prevState)</span></span> &#123;&#125;</div></pre></td></tr></table></figure>
+<p>以上便是组件更新时可能遇见的声明周期，我们以执行一次<code>setState</code>为例，将依次执行<code>shouldComponentUpdate</code> =&gt; <code>componentWillUpdate</code> =&gt; <code>componentDidUpdate</code>三个生命周期。</p>
+<h4 id="shouldComponentUpdate"><a href="#shouldComponentUpdate" class="headerlink" title="shouldComponentUpdate"></a>shouldComponentUpdate</h4><p>在React中，当一个父级节点改变其<code>Props</code>时，其下属的所有子级节点都会被重新渲染，而在一些情况下，对于子节点而言<code>Props</code>的改变并不需要重新进行<code>render</code>。所以我们可以在这个生命周期中自行判断当前传递的<code>Props</code>是否需要对当前组件进行更新，当在这个生命周期中返回<code>false</code>时，之后关于组件更新的生命周期不会被执行。</p>
+<h4 id="componentWillUpdate与componentDidUpdate"><a href="#componentWillUpdate与componentDidUpdate" class="headerlink" title="componentWillUpdate与componentDidUpdate"></a>componentWillUpdate与componentDidUpdate</h4><p>这两个生命周期与<code>componentWillMount</code>和<code>componentDidMount</code>十分相似，<code>componentWillMount</code>与<code>componentDidMount</code>代表着组件装载时<code>render</code>执行前后的时刻，而<code>componentWillUpdate</code>与<code>componentDidUpdate</code>分别代表组件更新时<code>render</code>执行的前后时刻。</p>
+<p>在React官方文档中提到了不要在<code>ComponentWillMount</code>的过程中使用<code>setState</code>，原因也就十分清晰：当执行<code>setState</code>会触发<code>shouldComponentUpdate</code> =&gt; <code>componentWillUpdate</code> =&gt; <code>componentDidUpdate</code>下列生命周期，而在<code>componentWillUpdate</code>时使用即触发了无限递归调用导致爆栈。</p>
+<h4 id="componentWillReceiveProps"><a href="#componentWillReceiveProps" class="headerlink" title="componentWillReceiveProps"></a>componentWillReceiveProps</h4><p>如果组件的更新时由<code>Props</code>变化导致的，则会在<code>shouldComponentUpdate</code>之前执行这个生命周期，在这个生命周期中使用<code>setState</code>不会触发二次渲染。通过这种方式我们可以实现通过外层的<code>Props</code>控制组件内部的<code>State</code>更新。</p>
+<h3 id="组件的整体声明周期流程"><a href="#组件的整体声明周期流程" class="headerlink" title="组件的整体声明周期流程"></a>组件的整体声明周期流程</h3><p>一图流解释单个组件整体生命周期</p>
+<p><img src="http://ww1.sinaimg.cn/large/73797f53gy1fjrpacx8boj218s0r6agl.jpg" alt=""></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://zzfe.top/2017/02/25/常用排序算法JavaScript描述/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -421,160 +591,6 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://zzfe.top/2016/04/13/数据结构JavaScript描述--二叉树与二叉查找树/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Zz">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://ww1.sinaimg.cn/large/73797f53gw1f8ou875kqmj20gv0gvabl.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="ZzFe">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/04/13/数据结构JavaScript描述--二叉树与二叉查找树/" itemprop="url">
-                  数据结构JavaScript描述--二叉树和二叉查找树
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-04-13T17:00:12+08:00">
-                2016-04-13
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
-                    <span itemprop="name">JavaScript</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2016/04/13/数据结构JavaScript描述--二叉树与二叉查找树/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/13/数据结构JavaScript描述--二叉树与二叉查找树/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>树是一种非线性的数据结构，以分层的方式存储数据。树被用来存储具有层级关系的数据，例如文件系统中的文件。
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2016/04/13/数据结构JavaScript描述--二叉树与二叉查找树/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://zzfe.top/2016/04/13/数据结构JavaScript描述--散列/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -687,6 +703,160 @@
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2016/04/13/数据结构JavaScript描述--散列/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://zzfe.top/2016/04/13/数据结构JavaScript描述--二叉树与二叉查找树/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zz">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ww1.sinaimg.cn/large/73797f53gw1f8ou875kqmj20gv0gvabl.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ZzFe">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/04/13/数据结构JavaScript描述--二叉树与二叉查找树/" itemprop="url">
+                  数据结构JavaScript描述--二叉树和二叉查找树
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-04-13T17:00:12+08:00">
+                2016-04-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaScript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/04/13/数据结构JavaScript描述--二叉树与二叉查找树/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/13/数据结构JavaScript描述--二叉树与二叉查找树/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>树是一种非线性的数据结构，以分层的方式存储数据。树被用来存储具有层级关系的数据，例如文件系统中的文件。
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2016/04/13/数据结构JavaScript描述--二叉树与二叉查找树/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1645,160 +1815,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://zzfe.top/2016/03/03/JavaScript原型与原型链/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Zz">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://ww1.sinaimg.cn/large/73797f53gw1f8ou875kqmj20gv0gvabl.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="ZzFe">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/03/03/JavaScript原型与原型链/" itemprop="url">
-                  JavaScript原型与原型链
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-03-03T17:01:23+08:00">
-                2016-03-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
-                    <span itemprop="name">JavaScript</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2016/03/03/JavaScript原型与原型链/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/03/JavaScript原型与原型链/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>在JavaScript中并不包含传统的类式继承模型，而是使用了原型(prototype)模型。这种方式的继承模型往往比传统的类式继承还要强大，但是实现则要复杂的多。
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2016/03/03/JavaScript原型与原型链/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1848,7 +1864,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-count">19</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1857,7 +1873,7 @@
           
             <div class="site-state-item site-state-categories">
               
-                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-count">3</span>
                 <span class="site-state-item-name">分类</span>
               
             </div>
@@ -1866,7 +1882,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-count">13</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

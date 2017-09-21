@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="JavaScript,数据结构," />
+  <meta name="keywords" content="React,生命周期," />
 
 
 
@@ -87,18 +87,39 @@
 
 
 
-<meta name="description" content="树是一种非线性的数据结构，以分层的方式存储数据。树被用来存储具有层级关系的数据，例如文件系统中的文件。">
+<meta name="description" content="生命周期概述Life Circle这一概念被广泛应用于诸多框架之中，它通常描述了某个事物阶段性发生变化的规律。在React中使用Life Circle这一概念描述了组件存在于页面上的各种时期。
+根据React官方的定义，我们可以大致将生命周期分为两大类：
+
+组件被装载或卸载时
+组件更新时
+
+装载与卸载过程组件装载与卸载过程在整个组件的声明周期内只会执行一次。
+Mount-装载装载过程中的声明周期如">
 <meta property="og:type" content="article">
-<meta property="og:title" content="数据结构JavaScript描述--二叉树和二叉查找树">
-<meta property="og:url" content="http://zzfe.top/2016/04/13/数据结构JavaScript描述--二叉树与二叉查找树/index.html">
+<meta property="og:title" content="详解React生命周期">
+<meta property="og:url" content="http://zzfe.top/2017/09/21/详解React生命周期/index.html">
 <meta property="og:site_name" content="ZzFe">
-<meta property="og:description" content="树是一种非线性的数据结构，以分层的方式存储数据。树被用来存储具有层级关系的数据，例如文件系统中的文件。">
-<meta property="og:image" content="http://ww4.sinaimg.cn/large/73797f53jw1f4h8f4wt3lj20gw09fwf1.jpg">
-<meta property="og:updated_time" content="2017-02-24T10:16:26.000Z">
+<meta property="og:description" content="生命周期概述Life Circle这一概念被广泛应用于诸多框架之中，它通常描述了某个事物阶段性发生变化的规律。在React中使用Life Circle这一概念描述了组件存在于页面上的各种时期。
+根据React官方的定义，我们可以大致将生命周期分为两大类：
+
+组件被装载或卸载时
+组件更新时
+
+装载与卸载过程组件装载与卸载过程在整个组件的声明周期内只会执行一次。
+Mount-装载装载过程中的声明周期如">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/73797f53gy1fjrpacx8boj218s0r6agl.jpg">
+<meta property="og:updated_time" content="2017-09-21T17:34:16.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="数据结构JavaScript描述--二叉树和二叉查找树">
-<meta name="twitter:description" content="树是一种非线性的数据结构，以分层的方式存储数据。树被用来存储具有层级关系的数据，例如文件系统中的文件。">
-<meta name="twitter:image" content="http://ww4.sinaimg.cn/large/73797f53jw1f4h8f4wt3lj20gw09fwf1.jpg">
+<meta name="twitter:title" content="详解React生命周期">
+<meta name="twitter:description" content="生命周期概述Life Circle这一概念被广泛应用于诸多框架之中，它通常描述了某个事物阶段性发生变化的规律。在React中使用Life Circle这一概念描述了组件存在于页面上的各种时期。
+根据React官方的定义，我们可以大致将生命周期分为两大类：
+
+组件被装载或卸载时
+组件更新时
+
+装载与卸载过程组件装载与卸载过程在整个组件的声明周期内只会执行一次。
+Mount-装载装载过程中的声明周期如">
+<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/73797f53gy1fjrpacx8boj218s0r6agl.jpg">
 
 
 
@@ -126,13 +147,13 @@
 
 
 
-  <link rel="canonical" href="http://zzfe.top/2016/04/13/数据结构JavaScript描述--二叉树与二叉查找树/"/>
+  <link rel="canonical" href="http://zzfe.top/2017/09/21/详解React生命周期/"/>
 
 
 
 
 
-  <title> 数据结构JavaScript描述--二叉树和二叉查找树 | ZzFe </title>
+  <title> 详解React生命周期 | ZzFe </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -260,7 +281,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://zzfe.top/2016/04/13/数据结构JavaScript描述--二叉树与二叉查找树/">
+    <link itemprop="mainEntityOfPage" href="http://zzfe.top/2017/09/21/详解React生命周期/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Zz">
@@ -281,7 +302,7 @@
             
             
               
-                数据结构JavaScript描述--二叉树和二叉查找树
+                详解React生命周期
               
             
           </h1>
@@ -296,8 +317,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-04-13T17:00:12+08:00">
-                2016-04-13
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-21T23:29:44+08:00">
+                2017-09-21
               </time>
             
 
@@ -319,8 +340,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
-                    <span itemprop="name">JavaScript</span>
+                  <a href="/categories/React/" itemprop="url" rel="index">
+                    <span itemprop="name">React</span>
                   </a>
                 </span>
 
@@ -337,8 +358,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/04/13/数据结构JavaScript描述--二叉树与二叉查找树/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/13/数据结构JavaScript描述--二叉树与二叉查找树/" itemprop="commentCount"></span>
+                <a href="/2017/09/21/详解React生命周期/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/09/21/详解React生命周期/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -364,35 +385,27 @@
       
 
       
-        <p>树是一种非线性的数据结构，以分层的方式存储数据。树被用来存储具有层级关系的数据，例如文件系统中的文件。<a id="more"></a></p>
-<h2 id="树的定义"><a href="#树的定义" class="headerlink" title="树的定义"></a>树的定义</h2><p>树是一组以边连接的节点组成。下面的图展示了关于树的常用术语：</p>
-<p><img src="http://ww4.sinaimg.cn/large/73797f53jw1f4h8f4wt3lj20gw09fwf1.jpg" alt=""></p>
-<p>一个树最上面的节点称作根节点；如果一个节点下面连接多个节点，那么该节点成为父节点，它下面的节点叫做子节点；没有任何子节点的节点称作叶子节点。</p>
-<p>我们所讨论的二叉树是一种特殊的树，它的子节点个数不超过两个。这使他具有一些特殊的计算性质，让他们在一些操作上异常高效。</p>
-<h2 id="二叉树与二叉查找树"><a href="#二叉树与二叉查找树" class="headerlink" title="二叉树与二叉查找树"></a>二叉树与二叉查找树</h2><p>二叉树每个节点的子节点不允许超过两个。通过将子节点的个数限定为2，可以写出高效的程序在树种插入，查找，删除数据。</p>
-<p>而二叉查找树是一种特殊的二叉树，相对较小的值保存在子节点中，较大的值保存在右节点中。这一特性使得查找的效率非常高。</p>
-<h3 id="实现二叉查找树"><a href="#实现二叉查找树" class="headerlink" title="实现二叉查找树"></a>实现二叉查找树</h3><p>二叉查找树由节点组成，所有我们要定义一个对象就是Node，类似链表中节点的形式：</p>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">function Node(<span class="keyword">data</span>, left, right) &#123;</div><div class="line">    <span class="keyword">this</span>.<span class="keyword">data</span> = <span class="keyword">data</span>;</div><div class="line">    <span class="keyword">this</span>.left = left;</div><div class="line">    <span class="keyword">this</span>.right = right;</div><div class="line">&#125;</div><div class="line"></div><div class="line">Node.prototype.show = function() &#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.<span class="keyword">data</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>Node对象既保存节点数据，还储存其他节点的链接（left和right），show()方法用于显示保存在节点中的数据。</p>
-<p>现在创建一个类表示二叉查找树(BST)。我们让类只包含一个数据成员：表示根节点的Node对象。同时将根节点的data设置为null。</p>
-<p>我们需要为BST类实现insert()方法，向树中插入新节点。下面具体讲一讲这个方法的实现：</p>
-<p>首先创建一个Node对象，将数据传入该对象保存。然后检查根节点是否为空，如果空，则该节点就是根节点，否则进入下一步。</p>
-<p>我们需要遍历BST，将节点插入适当位置。算法如下：</p>
+        <h2 id="生命周期概述"><a href="#生命周期概述" class="headerlink" title="生命周期概述"></a>生命周期概述</h2><p>Life Circle这一概念被广泛应用于诸多框架之中，它通常描述了某个事物阶段性发生变化的规律。在React中使用Life Circle这一概念描述了组件存在于页面上的各种时期。</p>
+<p>根据React官方的定义，我们可以大致将生命周期分为两大类：</p>
 <ol>
-<li><p>设置根节点为当前节点。</p>
-</li>
-<li><p>如果待插入的节点保存数据小于当前节点，则设新的当前节点为原节点的左节点；不过不是进入步骤4.</p>
-</li>
-<li><p>如果当前节点的左节点为null，就讲新的节点插入这个位置，退出循环；如果不是，则再次循环。</p>
-</li>
-<li><p>设新的当前节点为原节点右节点。</p>
-</li>
-<li><p>如果当前节点的右节点为null，就将新的节点插入这个位置，退出循环；如果不是，则再次循环。</p>
-</li>
+<li>组件被装载或卸载时</li>
+<li>组件更新时</li>
 </ol>
-<p>代码如下：</p>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">function BST() &#123;</div><div class="line">    <span class="keyword">this</span>.root = <span class="literal">null</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line">BST.prototype.insert = function(<span class="keyword">data</span>) &#123;</div><div class="line">    <span class="keyword">var</span> n = new Node(<span class="keyword">data</span>, <span class="literal">null</span>, <span class="literal">null</span>);</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.root == <span class="literal">null</span>) &#123;</div><div class="line">        <span class="keyword">this</span>.root = n;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">else</span> &#123;</div><div class="line">        <span class="keyword">var</span> current = <span class="keyword">this</span>.root;</div><div class="line">        <span class="keyword">var</span> parent;</div><div class="line">        <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</div><div class="line">            parent = current;</div><div class="line">            <span class="keyword">if</span> (<span class="keyword">data</span> &lt; current.<span class="keyword">data</span>) &#123;</div><div class="line">                current = current.left;</div><div class="line">                <span class="keyword">if</span> (current == <span class="literal">null</span>) &#123;</div><div class="line">                    parent.left == n;</div><div class="line">                    <span class="keyword">break</span>;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">else</span> &#123;</div><div class="line">                current = current.right;</div><div class="line">                <span class="keyword">if</span> (current == <span class="literal">null</span>) &#123;</div><div class="line">                    parent.right = n;</div><div class="line">                    <span class="keyword">break</span>;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="遍历二叉查找树"><a href="#遍历二叉查找树" class="headerlink" title="遍历二叉查找树"></a>遍历二叉查找树</h3><p>有三种遍历BST的方式：先序，中序和后序。中序遍历按照节点上的键值，</p>
+<h3 id="装载与卸载过程"><a href="#装载与卸载过程" class="headerlink" title="装载与卸载过程"></a>装载与卸载过程</h3><p><strong>组件装载与卸载过程在整个组件的声明周期内只会执行一次。</strong></p>
+<h4 id="Mount-装载"><a href="#Mount-装载" class="headerlink" title="Mount-装载"></a>Mount-装载</h4><p>装载过程中的声明周期如下</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">componentName</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</div><div class="line">    constructor(props) &#123;</div><div class="line">        <span class="keyword">super</span>(props);</div><div class="line">    &#125;</div><div class="line">    componentWillMount() &#123;&#125;</div><div class="line">    componentDidMount() &#123;&#125;</div><div class="line">    render() &#123;</div><div class="line">        <span class="keyword">return</span> (</div><div class="line">            &lt;div&gt;</div><div class="line">                <span class="type">Some</span> <span class="type">Thing</span></div><div class="line">            &lt;/div&gt;</div><div class="line">        );</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里调用了<code>componentWillMount</code>与<code>componentDidMount</code>两个生命周期方法。分别是组件在执行即将装载时（<code>render</code>执行前）与装载结束(<code>render</code>执行后)的生命周期。</p>
+<p>当在<code>componentWillMount</code>中执行<code>setState</code>时，由于在<code>render</code>执行之前发生所以组件只会更新自身的<code>state</code>，并不会触发第二次的<code>render</code>。而在<code>componentDidMount</code>中使用<code>setState</code>时则会触发组件的更新使得组件再一次被<code>render</code>造成重复渲染。</p>
+<h4 id="Unmount-卸载"><a href="#Unmount-卸载" class="headerlink" title="Unmount-卸载"></a>Unmount-卸载</h4><p>组件的卸载只有一个生命周期即<code>componentWillUnmount</code>。通常被应用于清除定时器<code>clearInterval</code>，移除事件监听<code>removeEventListener</code>,防止由于闭包导致的内存泄漏。</p>
+<h3 id="组件更新过程"><a href="#组件更新过程" class="headerlink" title="组件更新过程"></a>组件更新过程</h3><p>React的核心思想之一即<code>View=F(Model)</code>,即通过数据<code>Model层</code>驱动视图<code>View层</code>的变化。而在React中通常通过两种形式改变<code>Model</code>的数据源：上层组件传递<code>Props</code>变化/自身执行了<code>setState</code>。这两种操作都会是组件触发更新相关的生命周期，并通过我们所制定的<code>F()</code>更新<code>View层</code>。</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="title">componentWillReceiveProps</span><span class="params">(nextProps)</span></span> &#123;&#125;</div><div class="line"><span class="function"><span class="title">shouldComponentUpdate</span><span class="params">(nextProps, nextState)</span></span> &#123;&#125;</div><div class="line"><span class="function"><span class="title">componentWillUpdate</span><span class="params">(nextProps, nextState)</span></span> &#123;&#125;</div><div class="line"><span class="function"><span class="title">componentDidUpdate</span><span class="params">(prevProps, prevState)</span></span> &#123;&#125;</div></pre></td></tr></table></figure>
+<p>以上便是组件更新时可能遇见的声明周期，我们以执行一次<code>setState</code>为例，将依次执行<code>shouldComponentUpdate</code> =&gt; <code>componentWillUpdate</code> =&gt; <code>componentDidUpdate</code>三个生命周期。</p>
+<h4 id="shouldComponentUpdate"><a href="#shouldComponentUpdate" class="headerlink" title="shouldComponentUpdate"></a>shouldComponentUpdate</h4><p>在React中，当一个父级节点改变其<code>Props</code>时，其下属的所有子级节点都会被重新渲染，而在一些情况下，对于子节点而言<code>Props</code>的改变并不需要重新进行<code>render</code>。所以我们可以在这个生命周期中自行判断当前传递的<code>Props</code>是否需要对当前组件进行更新，当在这个生命周期中返回<code>false</code>时，之后关于组件更新的生命周期不会被执行。</p>
+<h4 id="componentWillUpdate与componentDidUpdate"><a href="#componentWillUpdate与componentDidUpdate" class="headerlink" title="componentWillUpdate与componentDidUpdate"></a>componentWillUpdate与componentDidUpdate</h4><p>这两个生命周期与<code>componentWillMount</code>和<code>componentDidMount</code>十分相似，<code>componentWillMount</code>与<code>componentDidMount</code>代表着组件装载时<code>render</code>执行前后的时刻，而<code>componentWillUpdate</code>与<code>componentDidUpdate</code>分别代表组件更新时<code>render</code>执行的前后时刻。</p>
+<p>在React官方文档中提到了不要在<code>ComponentWillMount</code>的过程中使用<code>setState</code>，原因也就十分清晰：当执行<code>setState</code>会触发<code>shouldComponentUpdate</code> =&gt; <code>componentWillUpdate</code> =&gt; <code>componentDidUpdate</code>下列生命周期，而在<code>componentWillUpdate</code>时使用即触发了无限递归调用导致爆栈。</p>
+<h4 id="componentWillReceiveProps"><a href="#componentWillReceiveProps" class="headerlink" title="componentWillReceiveProps"></a>componentWillReceiveProps</h4><p>如果组件的更新时由<code>Props</code>变化导致的，则会在<code>shouldComponentUpdate</code>之前执行这个生命周期，在这个生命周期中使用<code>setState</code>不会触发二次渲染。通过这种方式我们可以实现通过外层的<code>Props</code>控制组件内部的<code>State</code>更新。</p>
+<h3 id="组件的整体声明周期流程"><a href="#组件的整体声明周期流程" class="headerlink" title="组件的整体声明周期流程"></a>组件的整体声明周期流程</h3><p>一图流解释单个组件整体生命周期</p>
+<p><img src="http://ww1.sinaimg.cn/large/73797f53gy1fjrpacx8boj218s0r6agl.jpg" alt=""></p>
 
       
     </div>
@@ -416,9 +429,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+            <a href="/tags/React/" rel="tag"># React</a>
           
-            <a href="/tags/数据结构/" rel="tag"># 数据结构</a>
+            <a href="/tags/生命周期/" rel="tag"># 生命周期</a>
           
         </div>
       
@@ -431,8 +444,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/04/11/数据结构JavaScript描述--字典/" rel="next" title="数据结构JavaScript描述--字典">
-                <i class="fa fa-chevron-left"></i> 数据结构JavaScript描述--字典
+              <a href="/2017/02/25/常用排序算法JavaScript描述/" rel="next" title="常用排序算法JavaScript描述">
+                <i class="fa fa-chevron-left"></i> 常用排序算法JavaScript描述
               </a>
             
           </div>
@@ -440,10 +453,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/04/13/数据结构JavaScript描述--散列/" rel="prev" title="数据结构JavaScript描述--散列">
-                数据结构JavaScript描述--散列 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -469,8 +478,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/04/13/数据结构JavaScript描述--二叉树与二叉查找树/"
-           data-title="数据结构JavaScript描述--二叉树和二叉查找树" data-url="http://zzfe.top/2016/04/13/数据结构JavaScript描述--二叉树与二叉查找树/">
+      <div class="ds-thread" data-thread-key="2017/09/21/详解React生命周期/"
+           data-title="详解React生命周期" data-url="http://zzfe.top/2017/09/21/详解React生命周期/">
       </div>
     
   </div>
@@ -592,7 +601,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#树的定义"><span class="nav-number">1.</span> <span class="nav-text">树的定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二叉树与二叉查找树"><span class="nav-number">2.</span> <span class="nav-text">二叉树与二叉查找树</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#实现二叉查找树"><span class="nav-number">2.1.</span> <span class="nav-text">实现二叉查找树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#遍历二叉查找树"><span class="nav-number">2.2.</span> <span class="nav-text">遍历二叉查找树</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#生命周期概述"><span class="nav-number">1.</span> <span class="nav-text">生命周期概述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#装载与卸载过程"><span class="nav-number">1.1.</span> <span class="nav-text">装载与卸载过程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Mount-装载"><span class="nav-number">1.1.1.</span> <span class="nav-text">Mount-装载</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Unmount-卸载"><span class="nav-number">1.1.2.</span> <span class="nav-text">Unmount-卸载</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#组件更新过程"><span class="nav-number">1.2.</span> <span class="nav-text">组件更新过程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#shouldComponentUpdate"><span class="nav-number">1.2.1.</span> <span class="nav-text">shouldComponentUpdate</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#componentWillUpdate与componentDidUpdate"><span class="nav-number">1.2.2.</span> <span class="nav-text">componentWillUpdate与componentDidUpdate</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#componentWillReceiveProps"><span class="nav-number">1.2.3.</span> <span class="nav-text">componentWillReceiveProps</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#组件的整体声明周期流程"><span class="nav-number">1.3.</span> <span class="nav-text">组件的整体声明周期流程</span></a></li></ol></li></ol></div>
             
 
           </div>
