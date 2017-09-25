@@ -376,7 +376,7 @@
 </ol>
 <h3 id="装载与卸载过程"><a href="#装载与卸载过程" class="headerlink" title="装载与卸载过程"></a>装载与卸载过程</h3><p><strong>组件装载与卸载过程在整个组件的生命周期内只会执行一次。</strong></p>
 <h4 id="Mount-装载"><a href="#Mount-装载" class="headerlink" title="Mount-装载"></a>Mount-装载</h4><p>装载过程中的生命周期如下</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">componentName</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</div><div class="line">    constructor(props) &#123;</div><div class="line">        <span class="keyword">super</span>(props);</div><div class="line">    &#125;</div><div class="line">    componentWillMount() &#123;&#125;</div><div class="line">    componentDidMount() &#123;&#125;</div><div class="line">    render() &#123;</div><div class="line">        <span class="keyword">return</span> (</div><div class="line">            &lt;div&gt;</div><div class="line">                <span class="type">Some</span> <span class="type">Thing</span></div><div class="line">            &lt;/div&gt;</div><div class="line">        );</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">    <span class="selector-tag">componentWillMount</span>() &#123;&#125;</div><div class="line">    <span class="selector-tag">componentDidMount</span>() &#123;&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>这里调用了<code>componentWillMount</code>与<code>componentDidMount</code>两个生命周期方法。分别是组件在执行即将装载时（<code>render</code>执行前）与装载结束(<code>render</code>执行后)的生命周期。</p>
 <p>当在<code>componentWillMount</code>中执行<code>setState</code>时，由于在<code>render</code>执行之前发生所以组件只会更新自身的<code>state</code>，并不会触发第二次的<code>render</code>。而在<code>componentDidMount</code>中使用<code>setState</code>时则会触发组件的更新使得组件再一次被<code>render</code>造成重复渲染。</p>
 <h4 id="Unmount-卸载"><a href="#Unmount-卸载" class="headerlink" title="Unmount-卸载"></a>Unmount-卸载</h4><p>组件的卸载只有一个生命周期即<code>componentWillUnmount</code>。通常被应用于清除定时器<code>clearInterval</code>，移除事件监听<code>removeEventListener</code>,防止由于闭包导致的内存泄漏。</p>
@@ -385,10 +385,39 @@
 <p>以上便是组件更新时可能遇见的生命周期，我们以执行一次<code>setState</code>为例，将依次执行<code>shouldComponentUpdate</code> =&gt; <code>componentWillUpdate</code> =&gt; <code>componentDidUpdate</code>三个生命周期。</p>
 <h4 id="shouldComponentUpdate"><a href="#shouldComponentUpdate" class="headerlink" title="shouldComponentUpdate"></a>shouldComponentUpdate</h4><p>在React中，当一个父级节点改变其<code>Props</code>时，其下属的所有子级节点都会被重新渲染，而在一些情况下，对于子节点而言<code>Props</code>的改变并不需要重新进行<code>render</code>。所以我们可以在这个生命周期中自行判断当前传递的<code>Props</code>是否需要对当前组件进行更新，当在这个生命周期中返回<code>false</code>时，之后关于组件更新的生命周期不会被执行。</p>
 <h4 id="componentWillUpdate与componentDidUpdate"><a href="#componentWillUpdate与componentDidUpdate" class="headerlink" title="componentWillUpdate与componentDidUpdate"></a>componentWillUpdate与componentDidUpdate</h4><p>这两个生命周期与<code>componentWillMount</code>和<code>componentDidMount</code>十分相似，<code>componentWillMount</code>与<code>componentDidMount</code>代表着组件装载时<code>render</code>执行前后的时刻，而<code>componentWillUpdate</code>与<code>componentDidUpdate</code>分别代表组件更新时<code>render</code>执行的前后时刻。</p>
-<p>在React官方文档中提到了不要在<code>ComponentWillMount</code>的过程中使用<code>setState</code>，原因也就十分清晰：当执行<code>setState</code>会触发<code>shouldComponentUpdate</code> =&gt; <code>componentWillUpdate</code> =&gt; <code>componentDidUpdate</code>下列生命周期，而在<code>componentWillUpdate</code>时使用即触发了无限递归调用导致爆栈。</p>
+<p>在React官方文档中提到了不要在<code>ComponentWillMount</code>的过程中使用<code>setState</code>，原因也就十分清晰：当执行<code>setState</code>会触发<code>shouldComponentUpdate</code> =&gt; <code>componentWillUpdate</code> =&gt; <code>componentDidUpdate</code>下列生命周期，而在<code>componentWillUpdate</code>时使用即触发了无限递归调用导致爆栈。同理在<code>shouldComponentUpdate</code>中使用也会造成同样的问题。</p>
 <h4 id="componentWillReceiveProps"><a href="#componentWillReceiveProps" class="headerlink" title="componentWillReceiveProps"></a>componentWillReceiveProps</h4><p>如果组件的更新时由<code>Props</code>变化导致的，则会在<code>shouldComponentUpdate</code>之前执行这个生命周期，在这个生命周期中使用<code>setState</code>不会触发二次渲染。通过这种方式我们可以实现通过外层的<code>Props</code>控制组件内部的<code>State</code>更新。</p>
 <h3 id="组件的整体生命周期流程"><a href="#组件的整体生命周期流程" class="headerlink" title="组件的整体生命周期流程"></a>组件的整体生命周期流程</h3><p>一图流解释单个组件整体生命周期</p>
 <p><img src="http://ww1.sinaimg.cn/large/73797f53gy1fjrpacx8boj218s0r6agl.jpg" alt=""></p>
+<hr>
+<h2 id="组件执行过程"><a href="#组件执行过程" class="headerlink" title="组件执行过程"></a>组件执行过程</h2><p>在我们创建一个React组件时，除了会使用LifeCircle相关的函数外还会使用例如<code>constructor()</code>,<code>render()</code>类的函数，也会在一些位置初始化<code>Props</code>,<code>State</code>。那么一个真实的React组件全部执行过程是怎样的呢？</p>
+<h3 id="构造器阶段constructor"><a href="#构造器阶段constructor" class="headerlink" title="构造器阶段constructor:"></a>构造器阶段<code>constructor</code>:</h3><pre><code>&gt; `getDefaultProps`: 在使用`static defaultProps = {}`时便是调用了内部`getDeafultProps`方法。如果在实例化时指定了`props`，则使用传入的`props`否则使用在`static defualtProps`中所定义的`props`。
+</code></pre><h3 id="组件Mounting阶段"><a href="#组件Mounting阶段" class="headerlink" title="组件Mounting阶段"></a>组件Mounting阶段</h3><pre><code>&gt; `getInitialState`: 在使用`this.state = {}`时就是调用的内部的`getInitialState`方法。
+
+&gt; `componentWillMount`: 判断组件中是否声明`componentWillMount`,有则执行，没有则直接执行`render`。而在`componentWillMount`中执行`setState`,会直接使当前的`state`与`getInitialState`合并避免二次渲染。
+
+&gt; `render`: 递归渲染`render`的组件树。
+
+&gt; `componentDidMount`: 判断有无`componentDidMount`,存在即执行。
+</code></pre><p>由于<code>render</code>的递归特性，父组件的<code>componetWillMount</code>总是在子组件的<code>conponentWillMount</code>之前调用，而父组件的<code>componentDidMount</code>总是在子组件的<code>componentDidMount</code>之后调用。</p>
+<p>   <img src="http://ww1.sinaimg.cn/large/73797f53ly1fjuwq09m1tj20o80tc40o.jpg" alt=""></p>
+<h3 id="组件Update阶段"><a href="#组件Update阶段" class="headerlink" title="组件Update阶段"></a>组件Update阶段</h3><pre><code>当组件的`props`或`state`发生变化是，则会进入Update阶段。
+
+&gt; `componentWillReceiveProps`: 判断有无`componentWillReceiveProps`，存在则执行。在此生命周期中执行`setState`是执行`state`合并不会触发`render`。
+
+&gt; `shouldComponetUpdate`: 根据该函数返回值判断是否进行下面的操作。不指定则返回`true`。当该函数返回了`false`时，传入的`nextProps`与`nextState`仍然会替换之前的`prevProps`与`prevState`。
+
+&gt; `componentWillUpdate`: 判断有无`componentWillUpdate`，存在即执行。
+
+&gt; `render`: 递归渲染`render`组件树。
+
+&gt; `componentDidUpdate`：判断有无`componentDidUpdate`，存在即执行。
+</code></pre><p>同Mount阶段原理，父组件的<code>componetWillUpdate</code>总是在子组件的<code>conponentWillUpdate</code>之前调用，而父组件的<code>componentDidUpdate</code>总是在子组件的<code>componentDidUpdate</code>之后调用。</p>
+<p>   <img src="http://ww1.sinaimg.cn/large/73797f53ly1fjuxfq0b6jj20ow0uu0v2.jpg" alt=""></p>
+<h3 id="组件Unmounting阶段"><a href="#组件Unmounting阶段" class="headerlink" title="组件Unmounting阶段"></a>组件Unmounting阶段</h3><pre><code>&gt; `componentWillUnmount`: 在这个阶段组件会将`state`的更新队列重置为`null`。所以设置了`setState`也没什么卵用。
+</code></pre><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p><img src="http://ww1.sinaimg.cn/large/73797f53ly1fjuxn3aqo8j21ho0nqaf8.jpg" alt=""></p>
+<hr>
+<h2 id="生命周期应用的实例"><a href="#生命周期应用的实例" class="headerlink" title="生命周期应用的实例"></a>生命周期应用的实例</h2><p>BB了这么多有的没的，既然React为我们提供了如此详尽的生命周期，那么每一种生命周期应该如何被使用，同样的代码逻辑在哪一个生命周期里会更加优雅？这里我参考了<code>antd</code>组件库中各种组件对于生命周期的把控与利用并提供解析。</p>
 
           
         
@@ -1208,160 +1237,6 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://zzfe.top/2016/03/08/数据结构JavaScript描述--队列/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Zz">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://ww1.sinaimg.cn/large/73797f53gw1f8ou875kqmj20gv0gvabl.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="ZzFe">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/03/08/数据结构JavaScript描述--队列/" itemprop="url">
-                  数据结构JavaScript描述--队列
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-03-08T22:54:33+08:00">
-                2016-03-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
-                    <span itemprop="name">JavaScript</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2016/03/08/数据结构JavaScript描述--队列/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/08/数据结构JavaScript描述--队列/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>队列是一种列表，不同的是只能在队尾插入元素，在对首删除元素。队列用于储存顺序排列的数据，先进先出（First-In-First-Out,FIFO）。
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2016/03/08/数据结构JavaScript描述--队列/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://zzfe.top/2016/03/08/数据结构JavaScript描述--栈/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1474,6 +1349,160 @@
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2016/03/08/数据结构JavaScript描述--栈/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://zzfe.top/2016/03/08/数据结构JavaScript描述--队列/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zz">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ww1.sinaimg.cn/large/73797f53gw1f8ou875kqmj20gv0gvabl.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ZzFe">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/03/08/数据结构JavaScript描述--队列/" itemprop="url">
+                  数据结构JavaScript描述--队列
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-03-08T22:54:33+08:00">
+                2016-03-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaScript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/03/08/数据结构JavaScript描述--队列/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/08/数据结构JavaScript描述--队列/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>队列是一种列表，不同的是只能在队尾插入元素，在对首删除元素。队列用于储存顺序排列的数据，先进先出（First-In-First-Out,FIFO）。
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2016/03/08/数据结构JavaScript描述--队列/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
