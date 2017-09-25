@@ -111,7 +111,7 @@ Mount-装载装载过程中的生命周期如">
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/73797f53ly1fjuwq09m1tj20o80tc40o.jpg">
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/73797f53ly1fjuxfq0b6jj20ow0uu0v2.jpg">
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/73797f53ly1fjuxn3aqo8j21ho0nqaf8.jpg">
-<meta property="og:updated_time" content="2017-09-25T03:53:29.000Z">
+<meta property="og:updated_time" content="2017-09-25T13:59:17.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="详解React生命周期">
 <meta name="twitter:description" content="生命周期概述Life Circle这一概念被广泛应用于诸多框架之中，它通常描述了某个事物阶段性发生变化的规律。在React中使用Life Circle这一概念描述了组件存在于页面上的各种时期。
@@ -396,7 +396,7 @@ Mount-装载装载过程中的生命周期如">
 </ol>
 <h3 id="装载与卸载过程"><a href="#装载与卸载过程" class="headerlink" title="装载与卸载过程"></a>装载与卸载过程</h3><p><strong>组件装载与卸载过程在整个组件的生命周期内只会执行一次。</strong></p>
 <h4 id="Mount-装载"><a href="#Mount-装载" class="headerlink" title="Mount-装载"></a>Mount-装载</h4><p>装载过程中的生命周期如下</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">    <span class="selector-tag">componentWillMount</span>() &#123;&#125;</div><div class="line">    <span class="selector-tag">componentDidMount</span>() &#123;&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="title">componentWillMount</span><span class="params">()</span></span> &#123;&#125;</div><div class="line"><span class="function"><span class="title">componentDidMount</span><span class="params">()</span></span> &#123;&#125;</div></pre></td></tr></table></figure>
 <p>这里调用了<code>componentWillMount</code>与<code>componentDidMount</code>两个生命周期方法。分别是组件在执行即将装载时（<code>render</code>执行前）与装载结束(<code>render</code>执行后)的生命周期。</p>
 <p>当在<code>componentWillMount</code>中执行<code>setState</code>时，由于在<code>render</code>执行之前发生所以组件只会更新自身的<code>state</code>，并不会触发第二次的<code>render</code>。而在<code>componentDidMount</code>中使用<code>setState</code>时则会触发组件的更新使得组件再一次被<code>render</code>造成重复渲染。</p>
 <h4 id="Unmount-卸载"><a href="#Unmount-卸载" class="headerlink" title="Unmount-卸载"></a>Unmount-卸载</h4><p>组件的卸载只有一个生命周期即<code>componentWillUnmount</code>。通常被应用于清除定时器<code>clearInterval</code>，移除事件监听<code>removeEventListener</code>,防止由于闭包导致的内存泄漏。</p>
@@ -411,31 +411,31 @@ Mount-装载装载过程中的生命周期如">
 <p><img src="http://ww1.sinaimg.cn/large/73797f53gy1fjrpacx8boj218s0r6agl.jpg" alt=""></p>
 <hr>
 <h2 id="组件执行过程"><a href="#组件执行过程" class="headerlink" title="组件执行过程"></a>组件执行过程</h2><p>在我们创建一个React组件时，除了会使用LifeCircle相关的函数外还会使用例如<code>constructor()</code>,<code>render()</code>类的函数，也会在一些位置初始化<code>Props</code>,<code>State</code>。那么一个真实的React组件全部执行过程是怎样的呢？</p>
-<h3 id="构造器阶段constructor"><a href="#构造器阶段constructor" class="headerlink" title="构造器阶段constructor:"></a>构造器阶段<code>constructor</code>:</h3><pre><code>&gt; `getDefaultProps`: 在使用`static defaultProps = {}`时便是调用了内部`getDeafultProps`方法。如果在实例化时指定了`props`，则使用传入的`props`否则使用在`static defualtProps`中所定义的`props`。
-</code></pre><h3 id="组件Mounting阶段"><a href="#组件Mounting阶段" class="headerlink" title="组件Mounting阶段"></a>组件Mounting阶段</h3><pre><code>&gt; `getInitialState`: 在使用`this.state = {}`时就是调用的内部的`getInitialState`方法。
-
-&gt; `componentWillMount`: 判断组件中是否声明`componentWillMount`,有则执行，没有则直接执行`render`。而在`componentWillMount`中执行`setState`,会直接使当前的`state`与`getInitialState`合并避免二次渲染。
-
-&gt; `render`: 递归渲染`render`的组件树。
-
-&gt; `componentDidMount`: 判断有无`componentDidMount`,存在即执行。
-</code></pre><p>由于<code>render</code>的递归特性，父组件的<code>componetWillMount</code>总是在子组件的<code>conponentWillMount</code>之前调用，而父组件的<code>componentDidMount</code>总是在子组件的<code>componentDidMount</code>之后调用。</p>
+<h3 id="构造器阶段constructor"><a href="#构造器阶段constructor" class="headerlink" title="构造器阶段constructor:"></a>构造器阶段<code>constructor</code>:</h3><blockquote>
+<p><code>getDefaultProps</code>: 在使用<code>static defaultProps = {}</code>时便是调用了内部<code>getDeafultProps</code>方法。如果在实例化时指定了<code>props</code>，则使用传入的<code>props</code>否则使用在<code>static defualtProps</code>中所定义的<code>props</code>。</p>
+</blockquote>
+<h3 id="组件Mounting阶段"><a href="#组件Mounting阶段" class="headerlink" title="组件Mounting阶段"></a>组件Mounting阶段</h3><blockquote>
+<p><code>getInitialState</code>: 在使用<code>this.state = {}</code>时就是调用的内部的<code>getInitialState</code>方法。</p>
+<p><code>componentWillMount</code>: 判断组件中是否声明<code>componentWillMount</code>,有则执行，没有则直接执行<code>render</code>。而在<code>componentWillMount</code>中执行<code>setState</code>,会直接使当前的<code>state</code>与<code>getInitialState</code>合并避免二次渲染。</p>
+<p><code>render</code>: 递归渲染<code>render</code>的组件树。</p>
+<p><code>componentDidMount</code>: 判断有无<code>componentDidMount</code>,存在即执行。</p>
+</blockquote>
+<p>由于<code>render</code>的递归特性，父组件的<code>componetWillMount</code>总是在子组件的<code>conponentWillMount</code>之前调用，而父组件的<code>componentDidMount</code>总是在子组件的<code>componentDidMount</code>之后调用。</p>
 <p>   <img src="http://ww1.sinaimg.cn/large/73797f53ly1fjuwq09m1tj20o80tc40o.jpg" alt=""></p>
-<h3 id="组件Update阶段"><a href="#组件Update阶段" class="headerlink" title="组件Update阶段"></a>组件Update阶段</h3><pre><code>当组件的`props`或`state`发生变化是，则会进入Update阶段。
-
-&gt; `componentWillReceiveProps`: 判断有无`componentWillReceiveProps`，存在则执行。在此生命周期中执行`setState`是执行`state`合并不会触发`render`。
-
-&gt; `shouldComponetUpdate`: 根据该函数返回值判断是否进行下面的操作。不指定则返回`true`。当该函数返回了`false`时，传入的`nextProps`与`nextState`仍然会替换之前的`prevProps`与`prevState`。
-
-&gt; `componentWillUpdate`: 判断有无`componentWillUpdate`，存在即执行。
-
-&gt; `render`: 递归渲染`render`组件树。
-
-&gt; `componentDidUpdate`：判断有无`componentDidUpdate`，存在即执行。
-</code></pre><p>同Mount阶段原理，父组件的<code>componetWillUpdate</code>总是在子组件的<code>conponentWillUpdate</code>之前调用，而父组件的<code>componentDidUpdate</code>总是在子组件的<code>componentDidUpdate</code>之后调用。</p>
+<h3 id="组件Update阶段"><a href="#组件Update阶段" class="headerlink" title="组件Update阶段"></a>组件Update阶段</h3><p>当组件的<code>props</code>或<code>state</code>发生变化是，则会进入Update阶段。</p>
+<blockquote>
+<p><code>componentWillReceiveProps</code>: 判断有无<code>componentWillReceiveProps</code>，存在则执行。在此生命周期中执行<code>setState</code>是执行<code>state</code>合并不会触发<code>render</code>。</p>
+<p><code>shouldComponetUpdate</code>: 根据该函数返回值判断是否进行下面的操作。不指定则返回<code>true</code>。当该函数返回了<code>false</code>时，传入的<code>nextProps</code>与<code>nextState</code>仍然会替换之前的<code>prevProps</code>与<code>prevState</code>。</p>
+<p><code>componentWillUpdate</code>: 判断有无<code>componentWillUpdate</code>，存在即执行。</p>
+<p><code>render</code>: 递归渲染<code>render</code>组件树。</p>
+<p><code>componentDidUpdate</code>：判断有无<code>componentDidUpdate</code>，存在即执行。</p>
+</blockquote>
+<p>同Mount阶段原理，父组件的<code>componetWillUpdate</code>总是在子组件的<code>conponentWillUpdate</code>之前调用，而父组件的<code>componentDidUpdate</code>总是在子组件的<code>componentDidUpdate</code>之后调用。</p>
 <p>   <img src="http://ww1.sinaimg.cn/large/73797f53ly1fjuxfq0b6jj20ow0uu0v2.jpg" alt=""></p>
-<h3 id="组件Unmounting阶段"><a href="#组件Unmounting阶段" class="headerlink" title="组件Unmounting阶段"></a>组件Unmounting阶段</h3><pre><code>&gt; `componentWillUnmount`: 在这个阶段组件会将`state`的更新队列重置为`null`。所以设置了`setState`也没什么卵用。
-</code></pre><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p><img src="http://ww1.sinaimg.cn/large/73797f53ly1fjuxn3aqo8j21ho0nqaf8.jpg" alt=""></p>
+<h3 id="组件Unmounting阶段"><a href="#组件Unmounting阶段" class="headerlink" title="组件Unmounting阶段"></a>组件Unmounting阶段</h3><blockquote>
+<p><code>componentWillUnmount</code>: 在这个阶段组件会将<code>state</code>的更新队列重置为<code>null</code>。所以设置了<code>setState</code>也没什么卵用。</p>
+</blockquote>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p><img src="http://ww1.sinaimg.cn/large/73797f53ly1fjuxn3aqo8j21ho0nqaf8.jpg" alt=""></p>
 <hr>
 <h2 id="生命周期应用的实例"><a href="#生命周期应用的实例" class="headerlink" title="生命周期应用的实例"></a>生命周期应用的实例</h2><p>BB了这么多有的没的，既然React为我们提供了如此详尽的生命周期，那么每一种生命周期应该如何被使用，同样的代码逻辑在哪一个生命周期里会更加优雅？这里我参考了<code>antd</code>组件库中各种组件对于生命周期的把控与利用并提供解析。</p>
 
