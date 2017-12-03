@@ -1,0 +1,767 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="FreeSwitch,Sip.js,WebRTC," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="使用WebRTC+SIP实现Web SIP 电话时，遇到SIP 错误488这个非常蛋疼的问题，一番查找后列出可能导致488的情况与解决方案：
+双方客户端使用的编解码器不一致即 A Client与 B Client使用的编解码器不一致导致建立连接后无法解析音频流导致488问题出现。
+示例如下：
+设A Client仅支持PCMA编码，而B Client仅支持PCMU编码。当A Client拨打电话是发">
+<meta property="og:type" content="article">
+<meta property="og:title" content="WebRTC客户端488错误解决方案">
+<meta property="og:url" content="http://zzfe.top/2017/12/03/WebRTC客户端488错误解决方案/index.html">
+<meta property="og:site_name" content="ZzFe">
+<meta property="og:description" content="使用WebRTC+SIP实现Web SIP 电话时，遇到SIP 错误488这个非常蛋疼的问题，一番查找后列出可能导致488的情况与解决方案：
+双方客户端使用的编解码器不一致即 A Client与 B Client使用的编解码器不一致导致建立连接后无法解析音频流导致488问题出现。
+示例如下：
+设A Client仅支持PCMA编码，而B Client仅支持PCMU编码。当A Client拨打电话是发">
+<meta property="og:updated_time" content="2017-12-03T15:57:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="WebRTC客户端488错误解决方案">
+<meta name="twitter:description" content="使用WebRTC+SIP实现Web SIP 电话时，遇到SIP 错误488这个非常蛋疼的问题，一番查找后列出可能导致488的情况与解决方案：
+双方客户端使用的编解码器不一致即 A Client与 B Client使用的编解码器不一致导致建立连接后无法解析音频流导致488问题出现。
+示例如下：
+设A Client仅支持PCMA编码，而B Client仅支持PCMU编码。当A Client拨打电话是发">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://zzfe.top/2017/12/03/WebRTC客户端488错误解决方案/"/>
+
+
+
+
+
+  <title> WebRTC客户端488错误解决方案 | ZzFe </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=60875579";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ZzFe</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">记录一路热烈</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://zzfe.top/2017/12/03/WebRTC客户端488错误解决方案/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zz">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ww1.sinaimg.cn/large/73797f53gw1f8ou875kqmj20gv0gvabl.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ZzFe">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                WebRTC客户端488错误解决方案
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-03T23:25:24+08:00">
+                2017-12-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaScript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/12/03/WebRTC客户端488错误解决方案/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/12/03/WebRTC客户端488错误解决方案/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>使用WebRTC+SIP实现Web SIP 电话时，遇到SIP 错误<code>488</code>这个非常蛋疼的问题，一番查找后列出可能导致488的情况与解决方案：</p>
+<h2 id="双方客户端使用的编解码器不一致"><a href="#双方客户端使用的编解码器不一致" class="headerlink" title="双方客户端使用的编解码器不一致"></a>双方客户端使用的编解码器不一致</h2><p>即 <code>A Client</code>与 <code>B Client</code>使用的编解码器不一致导致建立连接后无法解析音频流导致<code>488</code>问题出现。</p>
+<p>示例如下：</p>
+<p>设<code>A Client</code>仅支持<code>PCMA</code>编码，而<code>B Client</code>仅支持<code>PCMU</code>编码。当<code>A Client</code>拨打电话是发送的SIP INVITE报文如下(缩略)：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">v=0</div><div class="line">o=- 4474471241541922836 2 IN IP4 127.0.0.1</div><div class="line">s=-</div><div class="line">t=0 0</div><div class="line">a=group:BUNDLE audio</div><div class="line">a=msid-semantic: WMS IaQKl1bTF1e3p27jxkmcyH9LmMMymgTwN5RJ</div><div class="line">// 这一行标记了A Client使用音频、数据传输端口、协议栈、数字8对应下面的rtpmap即PCMA/8000</div><div class="line">m=audio 21977 UDP/TLS/RTP/SAVPF 8</div><div class="line">c=IN IP4 59.63.248.170</div><div class="line">a=rtpmap:8 PCMA/8000</div></pre></td></tr></table></figure>
+<p>经过<code>FreeSwitch</code>配备向<code>B Client</code>发送SIP 报文，而在<code>B Client</code>中并不支持<code>PCMA/8000</code>的编解码器，所以直接报出会话失败<code>488</code>的异常。我们可以通过启用<code>FreeSwitch</code>的自动转码解决这一问题：</p>
+<p>修改<code>FreeSwitch</code>中Internal Profile，将<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;<span class="built_in">param</span> name=<span class="string">"inbound-zrtp-passthru"</span> <span class="built_in">value</span>=<span class="string">"true"</span>/&gt;</div></pre></td></tr></table></figure></p>
+<p>这一行注释掉，在<code>fs_cli</code>中运行<code>sofia profile internal restart</code>重新启动配置文件即可。</p>
+<h2 id="使用Sip-js-代替JsSIP以获取更好的兼容性"><a href="#使用Sip-js-代替JsSIP以获取更好的兼容性" class="headerlink" title="使用Sip.js 代替JsSIP以获取更好的兼容性"></a>使用Sip.js 代替JsSIP以获取更好的兼容性</h2><p><code>sip.js</code>是从<code>JsSip</code>上Fork出的新项目，有更加良好的兼容性和更加友好强大的API。API风格与<code>JsSip</code>十分相似，切换成本并不大，这是<code>sip.js</code>官方提供的从<code>JsSip</code>迁移到<code>sip.js</code>的<a href="https://sipjs.com/guides/convert-to-sipjs/" target="_blank" rel="external">设置指南</a>。</p>
+<h2 id="增加ACL配置"><a href="#增加ACL配置" class="headerlink" title="增加ACL配置"></a>增加ACL配置</h2><p>在日志中发现这段异常<code>no suitable candidates found</code>：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">NO candidate ACL defined, Defaulting to wan.auto</div><div class="line">Save audio Candidate <span class="string">cid:</span> <span class="number">1</span> <span class="string">proto:</span> udp <span class="string">type:</span> host <span class="string">addr:</span> <span class="number">10.10</span><span class="number">.14</span><span class="number">.243</span>:<span class="number">57681</span></div><div class="line">Searching <span class="keyword">for</span> rtp candidate.</div><div class="line">Searching <span class="keyword">for</span> rtcp candidate.</div><div class="line">sofia<span class="regexp">/internal/</span><span class="number">1010</span>@<span class="number">116.62</span><span class="number">.191</span><span class="number">.227</span> no suitable candidates found.</div></pre></td></tr></table></figure>
+<p>经查明是配置了SSL证书后导致的副作用，只需要在<code>FreeSwitch</code>的Internal Profile中添加这两行：<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;<span class="built_in">param</span> name=<span class="string">"apply-candidate-acl"</span> <span class="built_in">value</span>=<span class="string">"localnet.auto"</span>/&gt;</div><div class="line">&lt;<span class="built_in">param</span> name=<span class="string">"apply-candidate-acl"</span> <span class="built_in">value</span>=<span class="string">"rfc1918.auto"</span>/&gt;</div></pre></td></tr></table></figure></p>
+<p>重启<code>FreeSwitch</code>即可生效。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/FreeSwitch/" rel="tag"># FreeSwitch</a>
+          
+            <a href="/tags/Sip-js/" rel="tag"># Sip.js</a>
+          
+            <a href="/tags/WebRTC/" rel="tag"># WebRTC</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/30/FreeSwitch+sip.js实现web sip电话/" rel="next" title="FreeSwitch+sip.js实现web sip电话">
+                <i class="fa fa-chevron-left"></i> FreeSwitch+sip.js实现web sip电话
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/12/03/WebRTC客户端488错误解决方案/"
+           data-title="WebRTC客户端488错误解决方案" data-url="http://zzfe.top/2017/12/03/WebRTC客户端488错误解决方案/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://ww1.sinaimg.cn/large/73797f53gw1f8ou875kqmj20gv0gvabl.jpg"
+               alt="Zz" />
+          <p class="site-author-name" itemprop="name">Zz</p>
+           
+              <p class="site-description motion-element" itemprop="description">左右摇摆的前端</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/tears330" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/zhang-zhong-yuan-83/activities" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-bold"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#双方客户端使用的编解码器不一致"><span class="nav-number">1.</span> <span class="nav-text">双方客户端使用的编解码器不一致</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用Sip-js-代替JsSIP以获取更好的兼容性"><span class="nav-number">2.</span> <span class="nav-text">使用Sip.js 代替JsSIP以获取更好的兼容性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#增加ACL配置"><span class="nav-number">3.</span> <span class="nav-text">增加ACL配置</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zz</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"zzfe"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

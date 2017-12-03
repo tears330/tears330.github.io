@@ -259,6 +259,354 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://zzfe.top/2017/12/03/WebRTC客户端488错误解决方案/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zz">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ww1.sinaimg.cn/large/73797f53gw1f8ou875kqmj20gv0gvabl.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ZzFe">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/12/03/WebRTC客户端488错误解决方案/" itemprop="url">
+                  WebRTC客户端488错误解决方案
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-03T23:25:24+08:00">
+                2017-12-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaScript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/12/03/WebRTC客户端488错误解决方案/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/12/03/WebRTC客户端488错误解决方案/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>使用WebRTC+SIP实现Web SIP 电话时，遇到SIP 错误<code>488</code>这个非常蛋疼的问题，一番查找后列出可能导致488的情况与解决方案：</p>
+<h2 id="双方客户端使用的编解码器不一致"><a href="#双方客户端使用的编解码器不一致" class="headerlink" title="双方客户端使用的编解码器不一致"></a>双方客户端使用的编解码器不一致</h2><p>即 <code>A Client</code>与 <code>B Client</code>使用的编解码器不一致导致建立连接后无法解析音频流导致<code>488</code>问题出现。</p>
+<p>示例如下：</p>
+<p>设<code>A Client</code>仅支持<code>PCMA</code>编码，而<code>B Client</code>仅支持<code>PCMU</code>编码。当<code>A Client</code>拨打电话是发送的SIP INVITE报文如下(缩略)：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">v=0</div><div class="line">o=- 4474471241541922836 2 IN IP4 127.0.0.1</div><div class="line">s=-</div><div class="line">t=0 0</div><div class="line">a=group:BUNDLE audio</div><div class="line">a=msid-semantic: WMS IaQKl1bTF1e3p27jxkmcyH9LmMMymgTwN5RJ</div><div class="line">// 这一行标记了A Client使用音频、数据传输端口、协议栈、数字8对应下面的rtpmap即PCMA/8000</div><div class="line">m=audio 21977 UDP/TLS/RTP/SAVPF 8</div><div class="line">c=IN IP4 59.63.248.170</div><div class="line">a=rtpmap:8 PCMA/8000</div></pre></td></tr></table></figure>
+<p>经过<code>FreeSwitch</code>配备向<code>B Client</code>发送SIP 报文，而在<code>B Client</code>中并不支持<code>PCMA/8000</code>的编解码器，所以直接报出会话失败<code>488</code>的异常。我们可以通过启用<code>FreeSwitch</code>的自动转码解决这一问题：</p>
+<p>修改<code>FreeSwitch</code>中Internal Profile，将<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;<span class="built_in">param</span> name=<span class="string">"inbound-zrtp-passthru"</span> <span class="built_in">value</span>=<span class="string">"true"</span>/&gt;</div></pre></td></tr></table></figure></p>
+<p>这一行注释掉，在<code>fs_cli</code>中运行<code>sofia profile internal restart</code>重新启动配置文件即可。</p>
+<h2 id="使用Sip-js-代替JsSIP以获取更好的兼容性"><a href="#使用Sip-js-代替JsSIP以获取更好的兼容性" class="headerlink" title="使用Sip.js 代替JsSIP以获取更好的兼容性"></a>使用Sip.js 代替JsSIP以获取更好的兼容性</h2><p><code>sip.js</code>是从<code>JsSip</code>上Fork出的新项目，有更加良好的兼容性和更加友好强大的API。API风格与<code>JsSip</code>十分相似，切换成本并不大，这是<code>sip.js</code>官方提供的从<code>JsSip</code>迁移到<code>sip.js</code>的<a href="https://sipjs.com/guides/convert-to-sipjs/" target="_blank" rel="external">设置指南</a>。</p>
+<h2 id="增加ACL配置"><a href="#增加ACL配置" class="headerlink" title="增加ACL配置"></a>增加ACL配置</h2><p>在日志中发现这段异常<code>no suitable candidates found</code>：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">NO candidate ACL defined, Defaulting to wan.auto</div><div class="line">Save audio Candidate <span class="string">cid:</span> <span class="number">1</span> <span class="string">proto:</span> udp <span class="string">type:</span> host <span class="string">addr:</span> <span class="number">10.10</span><span class="number">.14</span><span class="number">.243</span>:<span class="number">57681</span></div><div class="line">Searching <span class="keyword">for</span> rtp candidate.</div><div class="line">Searching <span class="keyword">for</span> rtcp candidate.</div><div class="line">sofia<span class="regexp">/internal/</span><span class="number">1010</span>@<span class="number">116.62</span><span class="number">.191</span><span class="number">.227</span> no suitable candidates found.</div></pre></td></tr></table></figure>
+<p>经查明是配置了SSL证书后导致的副作用，只需要在<code>FreeSwitch</code>的Internal Profile中添加这两行：<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;<span class="built_in">param</span> name=<span class="string">"apply-candidate-acl"</span> <span class="built_in">value</span>=<span class="string">"localnet.auto"</span>/&gt;</div><div class="line">&lt;<span class="built_in">param</span> name=<span class="string">"apply-candidate-acl"</span> <span class="built_in">value</span>=<span class="string">"rfc1918.auto"</span>/&gt;</div></pre></td></tr></table></figure></p>
+<p>重启<code>FreeSwitch</code>即可生效。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://zzfe.top/2017/11/30/FreeSwitch+sip.js实现web sip电话/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zz">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ww1.sinaimg.cn/large/73797f53gw1f8ou875kqmj20gv0gvabl.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ZzFe">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/11/30/FreeSwitch+sip.js实现web sip电话/" itemprop="url">
+                  FreeSwitch+sip.js实现web sip电话
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-30T22:10:38+08:00">
+                2017-11-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaScript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/11/30/FreeSwitch+sip.js实现web sip电话/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/11/30/FreeSwitch+sip.js实现web sip电话/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>本文讲述了通过FreeSwitch+Sip.js在浏览器端实现SIP应用的具体流程。趟了一堆坑也算总结出了一套最佳实践:)</p>
+<h2 id="配置FreeSwitch启用wss"><a href="#配置FreeSwitch启用wss" class="headerlink" title="配置FreeSwitch启用wss"></a>配置FreeSwitch启用wss</h2><font size="4" color="red"><strong>我们在下文中约定使用<code>${FS_INSTALL_DIR}</code>代替<code>FreeSwitch</code>的安装目录，默认为<code>/usr/local/freeswitch/</code>,请自行将下文中出现<code>${FS_INSTALL_DIR}</code>的文字替换成你的FreeSwitch安装目录:)</strong></font>
+
+
+<p>在<a href="https://freeswitch.org/confluence/display/FREESWITCH/WebRTC" target="_blank" rel="external">FreeSwitch官网文档</a>中介绍了如何与WebRtc进行通信，这里大致描述一下个人的配置流程。</p>
+<p>其实在<code>FreeSwitch</code>的初始设置中已经配置好<code>ws</code>的相关设置,但WebRTC的安全性标准要求Web端启用<code>SSL</code>加密传输。所以我们需要对<code>FreeSwitch</code>配置<code>wss</code>:</p>
+<h3 id="修改FreeSwitch-wss配置"><a href="#修改FreeSwitch-wss配置" class="headerlink" title="修改FreeSwitch wss配置"></a>修改FreeSwitch wss配置</h3><ol>
+<li><p>编辑<code>${FS_INSTALL_DIR}/sip_profiles/internal.xml</code></p>
+ <figure class="highlight dust"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="xml"><span class="comment">&lt;!-- ssl证书目录,默认检索该目录下的wss.pem --&gt;</span></span></div><div class="line"><span class="tag">&lt;<span class="name">param</span> <span class="attr">name</span>=<span class="string">"tls-cert-dir"</span> <span class="attr">value</span>=<span class="string">"$</span></span><span class="template-variable">&#123;FS_INSTALL_DIR&#125;</span><span class="xml"><span class="tag"><span class="string">/certs"</span>/&gt;</span></span></div><div class="line"><span class="comment">&lt;!-- FreeSwitch wss绑定端口 --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">param</span> <span class="attr">name</span>=<span class="string">"wss-binding"</span> <span class="attr">value</span>=<span class="string">":7443"</span>/&gt;</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>重启<code>FreeSwitch</code>,在<code>fs_cli</code>下执行<code>sofia profile internal restart</code></p>
+</li>
+</ol>
+<h3 id="安装证书"><a href="#安装证书" class="headerlink" title="安装证书"></a>安装证书</h3><p>我们默认使用阿里云免费颁发的证书作为例子：</p>
+<ol>
+<li><p>阿里云颁发的证书文件为<code>****.pem</code>和<code>****.key</code>, 我们按照<a href="https://freeswitch.org/confluence/display/FREESWITCH/WebRTC" target="_blank" rel="external">FreeSwitch官网文档</a>中提供的证书格式：</p>
+ <figure class="highlight haml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">-<span class="ruby">----<span class="keyword">BEGIN</span> CERTIFICATE-----</span></div><div class="line">&lt;cert&gt;</div><div class="line">-<span class="ruby">----<span class="keyword">END</span> CERTIFICATE-----</span></div><div class="line">-<span class="ruby">----<span class="keyword">BEGIN</span> RSA PRIVATE KEY-----</span></div><div class="line">&lt;key&gt;</div><div class="line">-<span class="ruby">----<span class="keyword">END</span> RSA PRIVATE KEY-----</span></div><div class="line">-<span class="ruby">----<span class="keyword">BEGIN</span> CERTIFICATE-----</span></div><div class="line">&lt;chain&gt;</div><div class="line">-<span class="ruby">----<span class="keyword">END</span> CERTIFICATE-----</span></div></pre></td></tr></table></figure>
+<p> 将<code>****.key</code>中的私钥部分拷贝到<code>****.pem</code>文件的末尾中。</p>
+<p> <strong>证书由机构直接颁发，并没有<code>&lt;chain&gt;</code>的部分，遵循<code>pem</code>格式直接留空即可</strong>。</p>
+<p> 也可以直接在证书目录中直接执行以下命令：</p>
+ <figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">echo <span class="string">''</span> &gt;&gt; ./wss &amp;&amp; cat *<span class="selector-class">.pem</span> &gt;&gt; ./wss &amp;&amp; cat *<span class="selector-class">.key</span> &gt;&gt; ./wss</div><div class="line">mv ./wss ./wss.pem</div></pre></td></tr></table></figure>
+</li>
+<li><p>在<code>${FS_INSTALL_DIR}</code>下新建<code>certs</code>文件夹，将<code>wss.pem</code>移动到该文件夹中。</p>
+</li>
+</ol>
+<h3 id="配置Nginx转发"><a href="#配置Nginx转发" class="headerlink" title="配置Nginx转发"></a>配置Nginx转发</h3><p>由于SSL证书适合域名绑在一起，我们需要配置下Nginx代理将请求转发到<code>FreeSwitch</code>上，配置如下：</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">map</span> $http_upgrade $connection_upgrade &#123;</div><div class="line">     default upgrade;</div><div class="line">     <span class="string">''</span>      <span class="keyword">close</span>;</div><div class="line">&#125;</div><div class="line">server &#123;</div><div class="line">    <span class="keyword">listen</span>       <span class="number">443</span>;</div><div class="line">    server_name  $&#123;YOUR_SERVER_HOME&#125;;</div><div class="line">    ssl on;</div><div class="line">    <span class="comment"># 证书路径</span></div><div class="line">    ssl_certificate   conf.d/cert/cert.pem;</div><div class="line">    ssl_certificate_key  conf.d/cert/private.key;</div><div class="line"></div><div class="line">    location / &#123;</div><div class="line">        <span class="comment"># 将请求转发到FreeSwitch，注意HTTPS</span></div><div class="line">        proxy_pass https:<span class="regexp">//</span><span class="number">127.0</span>.<span class="number">0</span>.<span class="number">1</span>:<span class="number">7443</span>;</div><div class="line">        <span class="comment"># 配置ws请求头</span></div><div class="line">        proxy_http_version <span class="number">1.1</span>;</div><div class="line">        proxy_set_header Upgrade $http_upgrade;</div><div class="line">        proxy_set_header Connection $connection_upgrade;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    access_log /var/<span class="keyword">log</span>/nginx/wss_access;</div><div class="line">    error_log /var/<span class="keyword">log</span>/nginx/wss_error debug;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="使用SIP-JS创建Web-SIP-电话"><a href="#使用SIP-JS创建Web-SIP-电话" class="headerlink" title="使用SIP.JS创建Web SIP 电话"></a>使用SIP.JS创建Web SIP 电话</h2><p>示例使用了<code>create-react-app</code>与<code>yarn</code>,没有请使用<code>npm</code>安装。<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">npm <span class="selector-tag">i</span> -g yarn</div><div class="line">npm <span class="selector-tag">i</span> -g create-react-app</div></pre></td></tr></table></figure></p>
+<ol>
+<li><p>使用<code>create-react-app</code>新建一个项目并安装<code>sip.js</code>。</p>
+ <figure class="highlight dsconfig"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">create-react-app</span> <span class="string">sip-demo</span></div><div class="line"><span class="string">yarn </span><span class="string">add </span><span class="string">sip.</span><span class="string">js</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>使用<code>sip.js</code>拨打电话实例如下:</p>
+ <figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div></pre></td><td class="code"><pre><div class="line">import React, &#123; Component &#125; <span class="keyword">from</span> <span class="string">'react'</span>;</div><div class="line">import SIP <span class="keyword">from</span> <span class="string">'sip.js'</span>;</div><div class="line"></div><div class="line"><span class="comment">// FreeSwitch SIP地址与用户名</span></div><div class="line"><span class="keyword">const</span> sipServer = <span class="string">'116.62.111.127'</span>;</div><div class="line"><span class="keyword">const</span> sipUser = <span class="string">'1111'</span>;</div><div class="line"><span class="keyword">const</span> uaOptions = &#123;</div><div class="line">    <span class="comment">// nginx 配置的代理地址</span></div><div class="line">    wsServers: [<span class="string">'wss://ws.test.com'</span>],</div><div class="line">    uri: `sip:$&#123;sipUser&#125;@$&#123;sipServer&#125;`,</div><div class="line">    password: <span class="string">'pwd'</span></div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="keyword">class</span> <span class="title">Test</span> <span class="title">extends</span> <span class="title">Component</span> &#123;</div><div class="line">    state = &#123;</div><div class="line">        <span class="keyword">value</span>: <span class="string">''</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    componentDidMount() &#123;</div><div class="line">        <span class="keyword">const</span> options = &#123;</div><div class="line">            media: &#123;</div><div class="line">            remote: &#123;</div><div class="line">                audio: <span class="keyword">this</span>.audio</div><div class="line">            &#125;</div><div class="line">            &#125;,</div><div class="line">            ua: uaOptions</div><div class="line">        &#125;;</div><div class="line">        <span class="keyword">this</span>.ua = <span class="keyword">new</span> SIP.WebRTC.Simple(options);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    call = () =&gt; &#123;</div><div class="line">        <span class="keyword">const</span> &#123; <span class="keyword">value</span> &#125; = <span class="keyword">this</span>.state;</div><div class="line">        <span class="keyword">this</span>.session = <span class="keyword">this</span>.ua.invite(`$&#123;<span class="keyword">value</span>&#125;@$&#123;&#125;`, &#123;</div><div class="line">            sessionDescriptionHandlerOptions: &#123;</div><div class="line">                constraints: &#123;</div><div class="line">                    audio: <span class="literal">true</span>,</div><div class="line">                    video: <span class="literal">false</span></div><div class="line">                &#125;</div><div class="line">            &#125;,</div><div class="line">        &#125;);</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    onChange = (e) =&gt; &#123;</div><div class="line">        <span class="keyword">this</span>.setState(&#123; <span class="keyword">value</span>: e.target.<span class="keyword">value</span> &#125;);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    render() &#123;</div><div class="line">        <span class="keyword">return</span> (</div><div class="line">            &lt;div&gt;</div><div class="line">                &lt;input <span class="keyword">value</span>=&#123;<span class="keyword">this</span>.state.<span class="keyword">value</span>&#125; onChange=&#123;<span class="keyword">this</span>.onChange&#125; type=<span class="string">"text"</span>/&gt;</div><div class="line">                &lt;button onClick=&#123;<span class="keyword">this</span>.call&#125;&gt;call&lt;/button&gt;</div><div class="line">                &lt;audio controls <span class="keyword">ref</span>=&#123;r =&gt; <span class="keyword">this</span>.audio = r&#125; /&gt;</div><div class="line">            &lt;/div&gt;</div><div class="line">        );</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">export <span class="keyword">default</span> Test;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>更多关于<code>sip.js</code>的玩法可以直接查看<a href="https://sipjs.com/" target="_blank" rel="external">官方文档</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://zzfe.top/2017/09/21/详解React生命周期/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1569,319 +1917,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://zzfe.top/2016/03/07/数据结构JavaScript描述--列表/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Zz">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://ww1.sinaimg.cn/large/73797f53gw1f8ou875kqmj20gv0gvabl.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="ZzFe">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/03/07/数据结构JavaScript描述--列表/" itemprop="url">
-                  数据结构JavaScript描述--列表
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-03-07T21:34:57+08:00">
-                2016-03-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
-                    <span itemprop="name">JavaScript</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2016/03/07/数据结构JavaScript描述--列表/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/07/数据结构JavaScript描述--列表/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="列表的ADT"><a href="#列表的ADT" class="headerlink" title="列表的ADT"></a>列表的ADT</h2><p>列表是一组有序的数据。每个列表中的数据项成为元素。在JavaScript中，列表的元素可以为任意数据类型。列表中可以保存多少元素并没有事先限定，实际使用时元素数量受内存的限制。
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2016/03/07/数据结构JavaScript描述--列表/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://zzfe.top/2016/03/06/数据结构JavaScript描述--数组/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Zz">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://ww1.sinaimg.cn/large/73797f53gw1f8ou875kqmj20gv0gvabl.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="ZzFe">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/03/06/数据结构JavaScript描述--数组/" itemprop="url">
-                  数据结构JavaScript描述--数组
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-03-06T22:34:57+08:00">
-                2016-03-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
-                    <span itemprop="name">JavaScript</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2016/03/06/数据结构JavaScript描述--数组/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/06/数据结构JavaScript描述--数组/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>数组是一种最最常见的数据结构，通常编程语言的将数组作为内建类型，效率很高，可以满足不同需求的数据存储。
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2016/03/06/数据结构JavaScript描述--数组/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1926,7 +1966,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-count">21</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1944,7 +1984,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-count">16</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
